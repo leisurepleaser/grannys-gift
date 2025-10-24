@@ -1,43 +1,35 @@
-// script.js — live Estimated total near Submit, summary after submit,
-// yellow+red-border UX, spam guard, internal email + auto-reply, optional Sheets logging.
+// script.js — quantity forced to 1–20, live total, yellow+red-border UX, spam guard,
+// internal email + auto-reply, optional Sheets logging, and a post-submit summary.
 (function () {
   document.addEventListener('DOMContentLoaded', () => {
     // ====== EDIT THESE IF YOUR EMAILJS IDs ARE DIFFERENT ======
     const CFG = {
       EMAILJS_PUBLIC_KEY: "fTkyrOb1GWzQ36JvY",
       EMAILJS_SERVICE_ID: "service_5axgx93",
-      EMAILJS_INTERNAL_TEMPLATE_ID: "template_fxankcs",    // to your two inboxes (set in Template "To")
+      EMAILJS_INTERNAL_TEMPLATE_ID: "template_fxankcs",    // goes to your two inboxes (set in Template "To")
       EMAILJS_AUTOREPLY_TEMPLATE_ID: "template_autoreply", // To must be {{to_email}}
-      GSHEETS_WEBAPP_URL: ""                               // optional: paste your Apps Script Web App URL
+      GSHEETS_WEBAPP_URL: ""                                // optional: paste your Apps Script Web App URL
     };
     // =========================================================
 
-    const form = document.getElementById('orderForm');
+    const form      = document.getElementById('orderForm');
     if (!form) return;
 
     // Inputs
-    const nameEl   = document.getElementById('name');
-    const phoneEl  = document.getElementById('phone');
-    const emailEl  = document.getElementById('email');
-    const sizeEl   = document.getElementById('size');
-    const qtyEl    = document.getElementById('quantity');
-      // Force Quantity dropdown to 1–20 (overrides any old HTML)
-      (function buildQuantityOptions(max = 20) {
-        if (!qtyEl) return;
-        let html = '<option value="" selected disabled>Choose qty…</option>';
-        for (let i = 1; i <= max; i++) html += `<option value="${i}">${i}</option>`;
-        qtyEl.innerHTML = html;
-      })();
-
-    const msgEl    = document.getElementById('message');
-    const hpEl     = document.getElementById('website'); // honeypot
-    const countEl  = document.getElementById('charCount');
-    const submitBtn= document.getElementById('submitBtn');
-    const statusEl = document.getElementById('status');
+    const nameEl    = document.getElementById('name');
+    const phoneEl   = document.getElementById('phone');
+    const emailEl   = document.getElementById('email');
+    const sizeEl    = document.getElementById('size');
+    const qtyEl     = document.getElementById('quantity');
+    const msgEl     = document.getElementById('message');
+    const hpEl      = document.getElementById('website'); // honeypot
+    const countEl   = document.getElementById('charCount');
+    const submitBtn = document.getElementById('submitBtn');
+    const statusEl  = document.getElementById('status');
 
     // Success panel + summary (create if missing so feature works regardless of HTML)
     let successPanel = document.getElementById('successPanel');
-    let summaryEl = document.getElementById('summary');
+    let summaryEl    = document.getElementById('summary');
     if (!successPanel) {
       successPanel = document.createElement('div');
       successPanel.id = 'successPanel';
@@ -75,14 +67,9 @@
       row.style.display = row.style.display || 'flex';
       row.style.justifyContent = row.style.justifyContent || 'flex-end';
       row.style.margin = row.style.margin || '10px 0 8px';
-
       row.appendChild(totalEl);
-      // insert right before the submit button
-      if (submitBtn && submitBtn.parentNode) {
-        submitBtn.parentNode.insertBefore(row, submitBtn);
-      } else {
-        form.appendChild(row);
-      }
+      if (submitBtn && submitBtn.parentNode) submitBtn.parentNode.insertBefore(row, submitBtn);
+      else form.appendChild(row);
     }
 
     // Currency formatter
@@ -122,7 +109,6 @@
       const opt = sizeEl.options[sizeEl.selectedIndex];
       let price = parseFloat(opt?.dataset?.price);
       if (Number.isFinite(price)) return price;
-
       // 2) Fallback by label text (in case HTML options lack data-price)
       const label = (opt?.textContent || '').toLowerCase();
       if (label.includes('whole'))   return 34.99;
@@ -145,6 +131,17 @@
       }
       totalEl.textContent = 'Estimated total: —';
     }
+
+    // ---- FORCE Quantity dropdown to 1–20 (overrides any old HTML) ----
+    (function enforceQuantityMax(max = 20) {
+      const el = document.getElementById('quantity') || document.querySelector('select[name="quantity"]');
+      if (!el) return;
+      const prev = parseInt(el.value, 10);
+      let html = '<option value="" selected disabled>Choose qty…</option>';
+      for (let i = 1; i <= max; i++) html += `<option value="${i}">${i}</option>`;
+      el.innerHTML = html;
+      if (Number.isInteger(prev) && prev >= 1 && prev <= max) el.value = String(prev);
+    })();
 
     // Watch inputs and selects; update both button state and total
     requiredEls.forEach(el => {
@@ -184,20 +181,20 @@
       if ((msgEl.value || '').length > 300) { setStatus('Message must be 300 characters or fewer.', 'error'); return; }
       if (isSpammy()) { setStatus('Something went wrong. Please try again in a moment.', 'error'); return; }
 
-      const name = nameEl.value.trim();
-      const phone = phoneEl.value.trim();
+      const name      = nameEl.value.trim();
+      const phone     = phoneEl.value.trim();
       const fromEmail = emailEl.value.trim();
-      const size = sizeEl.value.trim();
-      const quantity = qtyEl.value.trim();
-      const message = (msgEl.value || '').trim();
+      const size      = sizeEl.value.trim();
+      const quantity  = qtyEl.value.trim();
+      const message   = (msgEl.value || '').trim();
       const priceEach = getPriceForSize();
-      const total = priceEach * Number(quantity || 0);
+      const total     = priceEach * Number(quantity || 0);
 
       // Params for internal notification (recipients STATIC in EmailJS Template “To”)
       const internalParams = {
         name, phone, email: fromEmail, size, quantity,
-        price_each: new Intl.NumberFormat('en-US', { style: 'currency', currency: 'USD' }).format(priceEach),
-        total: isFinite(total) ? new Intl.NumberFormat('en-US', { style: 'currency', currency: 'USD' }).format(total) : '—',
+        price_each: fmtUSD.format(priceEach),
+        total: isFinite(total) ? fmtUSD.format(total) : '—',
         message: message || '(no message)',
         submitted_at: new Date().toLocaleString(),
         reply_to: fromEmail,
@@ -210,8 +207,8 @@
         name,
         size,
         quantity,
-        price_each: internalParams.price_each,
-        total: internalParams.total,
+        price_each: fmtUSD.format(priceEach),
+        total: isFinite(total) ? fmtUSD.format(total) : '—',
         submitted_at: new Date().toLocaleString()
       };
 
