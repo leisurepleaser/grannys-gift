@@ -56,7 +56,6 @@
           }
 
           const params = {
-            to_email: cfg.TO_EMAILS,        // "grannysgiftinc@gmail.com,kylekelleyjr@gmail.com"
             name,
             phone,
             email: fromEmail,
