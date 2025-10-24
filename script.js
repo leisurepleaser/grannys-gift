@@ -1,5 +1,5 @@
-// script.js — shows a post-submit summary, keeps yellow+red-border UX,
-// sends internal email + auto-reply, optional Sheets logging, and spam guard.
+// script.js — live Estimated total near Submit, summary after submit,
+// yellow+red-border UX, spam guard, internal email + auto-reply, optional Sheets logging.
 (function () {
   document.addEventListener('DOMContentLoaded', () => {
     // ====== EDIT THESE IF YOUR EMAILJS IDs ARE DIFFERENT ======
@@ -27,7 +27,7 @@
     const submitBtn = document.getElementById('submitBtn');
     const statusEl = document.getElementById('status');
 
-    // Success panel + summary (create if missing so this works even without HTML changes)
+    // Success panel + summary (create if missing so feature works regardless of HTML)
     let successPanel = document.getElementById('successPanel');
     let summaryEl = document.getElementById('summary');
     if (!successPanel) {
@@ -48,6 +48,12 @@
       summaryEl.id = 'summary';
       successPanel.appendChild(summaryEl);
     }
+
+    // Live total element
+    const totalEl = document.getElementById('orderTotal');
+
+    // Currency formatter
+    const fmtUSD = new Intl.NumberFormat('en-US', { style: 'currency', currency: 'USD' });
 
     // Status helper
     function setStatus(msg, kind) {
@@ -77,8 +83,8 @@
       submitBtn.classList.toggle('ready', ready); // yellow + red border when ready
     }
     requiredEls.forEach(el => {
-      el.addEventListener('input', updateSubmitState);
-      el.addEventListener('change', updateSubmitState);
+      el.addEventListener('input', () => { updateSubmitState(); updateTotalUI(); });
+      el.addEventListener('change', () => { updateSubmitState(); updateTotalUI(); });
     });
     updateSubmitState();
 
@@ -95,11 +101,24 @@
       localStorage.setItem('gg_last_submit_ts', String(Date.now()));
     }
 
-    // Price helper (from <option data-price>)
+    // Price helpers
     function getPriceForSize() {
       const opt = sizeEl.options[sizeEl.selectedIndex];
       return parseFloat(opt?.dataset?.price || "0");
     }
+    function updateTotalUI() {
+      if (!totalEl) return;
+      const qty = Number((qtyEl.value || '').trim());
+      const priceEach = getPriceForSize();
+      if (priceEach > 0 && qty > 0) {
+        const total = priceEach * qty;
+        totalEl.textContent = `Estimated total: ${fmtUSD.format(total)}`;
+      } else {
+        totalEl.textContent = 'Estimated total: —';
+      }
+    }
+    // initialize total once on load
+    updateTotalUI();
 
     // EmailJS init
     if (!window.emailjs) {
@@ -129,8 +148,8 @@
       // Params for internal notification (recipients STATIC in EmailJS Template “To”)
       const internalParams = {
         name, phone, email: fromEmail, size, quantity,
-        price_each: `$${priceEach.toFixed(2)}`,
-        total: isFinite(total) ? `$${total.toFixed(2)}` : '—',
+        price_each: fmtUSD.format(priceEach),
+        total: isFinite(total) ? fmtUSD.format(total) : '—',
         message: message || '(no message)',
         submitted_at: new Date().toLocaleString(),
         reply_to: fromEmail,
@@ -143,8 +162,8 @@
         name,
         size,
         quantity,
-        price_each: `$${priceEach.toFixed(2)}`,
-        total: isFinite(total) ? `$${total.toFixed(2)}` : '—',
+        price_each: fmtUSD.format(priceEach),
+        total: isFinite(total) ? fmtUSD.format(total) : '—',
         submitted_at: new Date().toLocaleString()
       };
 
@@ -170,7 +189,7 @@
             headers: { 'Content-Type': 'application/json' },
             body: JSON.stringify({
               name, email: fromEmail, phone, size,
-              price_each: priceEach, quantity, total,
+              price_each: priceEach, quantity: Number(quantity || 0), total,
               message, submitted_at: new Date().toISOString()
             })
           }).catch(() => {});
@@ -197,9 +216,9 @@
           <dt>Name</dt><dd>${escapeHtml(name)}</dd>
           <dt>Email</dt><dd>${escapeHtml(email)}</dd>
           <dt>Phone</dt><dd>${escapeHtml(phone)}</dd>
-          <dt>Size</dt><dd>${escapeHtml(size)} ${priceEach ? `($${priceEach.toFixed(2)})` : ''}</dd>
+          <dt>Size</dt><dd>${escapeHtml(size)} ${priceEach ? `(${fmtUSD.format(priceEach)})` : ''}</dd>
           <dt>Quantity</dt><dd>${escapeHtml(quantity)}</dd>
-          <dt>Total</dt><dd>${isFinite(total) ? '$' + total.toFixed(2) : '—'}</dd>
+          <dt>Total</dt><dd>${isFinite(total) ? fmtUSD.format(total) : '—'}</dd>
           <dt>Message</dt><dd>${escapeHtml(message || '(no message)')}</dd>
         </dl>`;
     }

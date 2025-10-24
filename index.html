@@ -84,6 +84,13 @@
         <!-- Honeypot (hidden from users; bots will often fill it) -->
         <input id="website" name="website" autocomplete="off" tabindex="-1" class="hp" aria-hidden="true" />
 
+        <!-- Live total (updates as you choose Size/Quantity) -->
+        <div class="total-row">
+          <div id="orderTotal" class="total-box" aria-live="polite" aria-atomic="true">
+            Estimated total: —
+          </div>
+        </div>
+
         <button id="submitBtn" type="submit" class="btn" disabled>Submit</button>
         <div id="status" role="status" aria-live="polite" class="status"></div>
       </form>
