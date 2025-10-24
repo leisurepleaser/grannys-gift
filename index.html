@@ -1,87 +1,77 @@
 <!doctype html>
 <html lang="en">
 <head>
-    <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 64 64'%3E%3Ctext y='50%25' x='50%25' dominant-baseline='middle' text-anchor='middle' font-size='48'%3E%F0%9F%8D%B0%3C/text%3E%3C/svg%3E">
-
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1" />
   <title>Granny’s Gift</title>
-  <meta name="description" content="Minimal inquiry form for Granny’s Gift." />
+
+  <!-- Basic CSP (keeps things tidy, tweak later if you add more CDNs) -->
+  <meta http-equiv="Content-Security-Policy"
+        content="default-src 'self'; img-src 'self' data:; style-src 'self' 'unsafe-inline';
+                 script-src 'self' https://cdn.jsdelivr.net; connect-src https://api.emailjs.com;">
+
+  <!-- Inline favicon to silence 404 -->
+  <link rel="icon"
+        href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 64 64'%3E%3Ctext y='50%25' x='50%25' dominant-baseline='middle' text-anchor='middle' font-size='48'%3E%F0%9F%8D%B0%3C/text%3E%3C/svg%3E">
+
   <link rel="stylesheet" href="styles.css" />
-  <!-- EmailJS CDN (browser SDK) -->
-  <script src="https://cdn.jsdelivr.net/npm/@emailjs/browser@3/dist/email.min.js"></script>
 </head>
 <body>
-  <main class="container" role="main">
-    <h1>Granny’s Gift</h1>
+  <main class="wrap">
+    <section class="card" role="region" aria-labelledby="title">
+      <h1 id="title">Granny’s Gift</h1>
 
-    <form id="inquiry-form" novalidate>
-      <table class="input-table" role="presentation">
-        <tbody>
-          <tr>
-            <td><label for="name">Name<span aria-hidden="true" class="req">*</span></label></td>
-            <td><input id="name" name="name" type="text" required autocomplete="name" /></td>
-          </tr>
-          <tr>
-            <td><label for="phone">Phone Number<span aria-hidden="true" class="req">*</span></label></td>
-            <td><input id="phone" name="phone" type="text" required autocomplete="tel" /></td>
-          </tr>
-          <tr>
-            <td><label for="email">Email<span aria-hidden="true" class="req">*</span></label></td>
-            <td><input id="email" name="email" type="email" required autocomplete="email" /></td>
-          </tr>
-          <tr>
-            <td><label for="size">Size<span aria-hidden="true" class="req">*</span></label></td>
-            <td>
-              <select id="size" name="size" required>
-                <option value="">Select Size</option>
-                <option>Whole Cake (1)</option>
-                <option>Cupcake (Jumbo)(2)</option>
-              </select>
-            </td>
-          </tr>
-          <tr>
-            <td><label for="quantity">Quantity<span aria-hidden="true" class="req">*</span></label></td>
-            <td>
-              <select id="quantity" name="quantity" required>
-                <option value="">Select Quantity</option>
-                <option>1</option>
-                <option>2</option>
-                <option>3</option>
-                <option>4</option>
-                <option>5</option>
-                <option>6</option>
-                <option>7</option>
-                <option>8</option>
-                <option>9</option>
-              </select>
-            </td>
-          </tr>
-          <tr>
-            <td><label for="message">Message (Optional):</label></td>
-            <td>
-              <textarea id="message" name="message" maxlength="300" rows="3" placeholder="Add any additional requests (max 300 chars)"></textarea>
-              <div class="helper-row">
-                <small id="charCounter">0/300</small>
-              </div>
-            </td>
-          </tr>
-        </tbody>
-      </table>
+      <form id="orderForm" novalidate>
+        <div class="row">
+          <label for="name">Name<span aria-hidden="true" class="req">*</span></label>
+          <input id="name" name="name" type="text" autocomplete="name" required />
+        </div>
 
-      <div class="actions">
-          <button id="submitBtn" type="submit" class="btn">Submit</button> aria-disabled="true">Submit</button>
-        <div id="status" class="status" role="status" aria-live="polite"></div>
-      </div>
-    </form>
+        <div class="row">
+          <label for="phone">Phone Number<span aria-hidden="true" class="req">*</span></label>
+          <input id="phone" name="phone" type="text" inputmode="tel" required />
+        </div>
+
+        <div class="row">
+          <label for="email">Email<span aria-hidden="true" class="req">*</span></label>
+          <input id="email" name="email" type="email" autocomplete="email" required />
+        </div>
+
+        <div class="row">
+          <label for="size">Size<span aria-hidden="true" class="req">*</span></label>
+          <select id="size" name="size" required>
+            <option value="" selected disabled>Choose one…</option>
+            <option value="Whole Cake (1)">Whole Cake (1)</option>
+            <option value="Cupcake (Jumbo)(2)">Cupcake (Jumbo)(2)</option>
+          </select>
+        </div>
+
+        <div class="row">
+          <label for="quantity">Quantity<span aria-hidden="true" class="req">*</span></label>
+          <select id="quantity" name="quantity" required>
+            <option value="" selected disabled>Choose qty…</option>
+            <option value="1">1</option><option value="2">2</option><option value="3">3</option>
+            <option value="4">4</option><option value="5">5</option><option value="6">6</option>
+            <option value="7">7</option><option value="8">8</option><option value="9">9</option>
+          </select>
+        </div>
+
+        <div class="row">
+          <label for="message">Message (Optional):</label>
+          <textarea id="message" name="message" maxlength="300" rows="4" placeholder="Up to 300 characters"></textarea>
+          <small id="charCount" class="muted">0/300</small>
+        </div>
+
+        <button id="submitBtn" type="submit" class="btn" disabled>Submit</button>
+
+        <div id="status" role="status" aria-live="polite" class="status"></div>
+      </form>
+    </section>
   </main>
 
+  <!-- EmailJS browser SDK -->
   <script src="https://cdn.jsdelivr.net/npm/@emailjs/browser@4/dist/email.min.js"></script>
   <script defer src="script.js"></script>
-
-  <script src="script.js"></script>
-  
-  <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 64 64'%3E%3Ctext y='50%25' x='50%25' dominant-baseline='middle' text-anchor='middle' font-size='48'%3E%F0%9F%8D%B0%3C/text%3E%3C/svg%3E">
-
 </body>
 </html>
+
