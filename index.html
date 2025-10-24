@@ -1,0 +1,79 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Granny’s Gift</title>
+  <meta name="description" content="Minimal inquiry form for Granny’s Gift." />
+  <link rel="stylesheet" href="styles.css" />
+  <!-- EmailJS CDN (browser SDK) -->
+  <script src="https://cdn.jsdelivr.net/npm/@emailjs/browser@3/dist/email.min.js"></script>
+</head>
+<body>
+  <main class="container" role="main">
+    <h1>Granny’s Gift</h1>
+
+    <form id="inquiry-form" novalidate>
+      <table class="input-table" role="presentation">
+        <tbody>
+          <tr>
+            <td><label for="name">Name<span aria-hidden="true" class="req">*</span></label></td>
+            <td><input id="name" name="name" type="text" required autocomplete="name" /></td>
+          </tr>
+          <tr>
+            <td><label for="phone">Phone Number<span aria-hidden="true" class="req">*</span></label></td>
+            <td><input id="phone" name="phone" type="text" required autocomplete="tel" /></td>
+          </tr>
+          <tr>
+            <td><label for="email">Email<span aria-hidden="true" class="req">*</span></label></td>
+            <td><input id="email" name="email" type="email" required autocomplete="email" /></td>
+          </tr>
+          <tr>
+            <td><label for="size">Size<span aria-hidden="true" class="req">*</span></label></td>
+            <td>
+              <select id="size" name="size" required>
+                <option value="">Select Size</option>
+                <option>Whole Cake (1)</option>
+                <option>Cupcake (Jumbo)(2)</option>
+              </select>
+            </td>
+          </tr>
+          <tr>
+            <td><label for="quantity">Quantity<span aria-hidden="true" class="req">*</span></label></td>
+            <td>
+              <select id="quantity" name="quantity" required>
+                <option value="">Select Quantity</option>
+                <option>1</option>
+                <option>2</option>
+                <option>3</option>
+                <option>4</option>
+                <option>5</option>
+                <option>6</option>
+                <option>7</option>
+                <option>8</option>
+                <option>9</option>
+              </select>
+            </td>
+          </tr>
+          <tr>
+            <td><label for="message">Message (Optional):</label></td>
+            <td>
+              <textarea id="message" name="message" maxlength="300" rows="3" placeholder="Add any additional requests (max 300 chars)"></textarea>
+              <div class="helper-row">
+                <small id="charCounter">0/300</small>
+              </div>
+            </td>
+          </tr>
+        </tbody>
+      </table>
+
+      <div class="actions">
+        <button id="submitBtn" type="button" class="btn" disabled aria-disabled="true">Submit</button>
+        <div id="status" class="status" role="status" aria-live="polite"></div>
+      </div>
+    </form>
+  </main>
+
+  <script src="script.js"></script>
+</body>
+</html>
