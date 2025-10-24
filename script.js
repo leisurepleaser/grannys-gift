@@ -1,162 +1,83 @@
-/* Granny's Gift minimal form logic (vanilla JS) */
-(function() {
-  const form = document.getElementById('inquiry-form');
-  const nameEl = document.getElementById('name');
-  const phoneEl = document.getElementById('phone');
-  const emailEl = document.getElementById('email');
-  const sizeEl = document.getElementById('size');
-  const quantityEl = document.getElementById('quantity');
-  const messageEl = document.getElementById('message');
-  const submitBtn = document.getElementById('submitBtn');
-  const statusEl = document.getElementById('status');
-  const counterEl = document.getElementById('charCounter');
+cat > script.js <<'JS'
+// script.js — sends the form via EmailJS
+(function () {
+  const form = document.querySelector('form');
+  const nameEl = document.querySelector('#name');
+  const phoneEl = document.querySelector('#phone');
+  const emailEl = document.querySelector('#email');
+  const sizeEl = document.querySelector('#size');
+  const qtyEl = document.querySelector('#quantity');
+  const msgEl = document.querySelector('#message');
+  const countEl = document.querySelector('#charCount');
 
-  let emailConfig = null;
-  let emailInitialized = false;
+  const statusEl = document.createElement('div');
+  statusEl.id = 'status';
+  statusEl.setAttribute('role', 'status');
+  statusEl.setAttribute('aria-live', 'polite');
+  statusEl.style.marginTop = '12px';
+  form.appendChild(statusEl);
 
-  // Load EmailJS config (public keys only)
+  // live char counter (0/300)
+  if (msgEl && countEl) {
+    const updateCount = () => (countEl.textContent = `${msgEl.value.length}/300`);
+    msgEl.addEventListener('input', updateCount);
+    updateCount();
+  }
+
+  // load config then init + bind submit
   fetch('email-config.json')
-    .then(r => {
-      if (!r.ok) throw new Error('Missing email-config.json');
-      return r.json();
-    })
+    .then(r => r.json())
     .then(cfg => {
-      emailConfig = cfg;
-      try {
-        if (window.emailjs && cfg && cfg.EMAILJS_PUBLIC_KEY) {
-          emailjs.init(cfg.EMAILJS_PUBLIC_KEY);
-          emailInitialized = true;
+      if (!window.emailjs) throw new Error('EmailJS SDK not loaded');
+      emailjs.init({ publicKey: cfg.EMAILJS_PUBLIC_KEY });
+
+      form.addEventListener('submit', async (e) => {
+        e.preventDefault();
+        setStatus('');
+
+        // basic validation
+        const name = (nameEl?.value || '').trim();
+        const phone = (phoneEl?.value || '').trim();
+        const email = (emailEl?.value || '').trim();
+        const size = (sizeEl?.value || '').trim();
+        const quantity = (qtyEl?.value || '').trim();
+        const message = (msgEl?.value || '').trim();
+
+        if (!name || !phone || !email || !size || !quantity) {
+          return setStatus('Please fill in all required fields.', 'error');
         }
-      } catch (e) {
-        emailInitialized = false;
-        // no-op; will surface as "Inquiry failed" on send
-      }
+        if (message.length > 300) {
+          return setStatus('Message must be 300 characters or fewer.', 'error');
+        }
+
+        const params = {
+          to_email: cfg.TO_EMAILS,
+          name, phone, email, size, quantity,
+          message: message || '(no message)',
+          submitted_at: new Date().toLocaleString()
+        };
+
+        setStatus('Sending…');
+        try {
+          await emailjs.send(cfg.EMAILJS_SERVICE_ID, cfg.EMAILJS_TEMPLATE_ID, params);
+          setStatus('Thanks! Your order was sent. We’ll be in touch soon.', 'ok');
+          form.reset();
+          if (countEl) countEl.textContent = '0/300';
+        } catch (err) {
+          console.error(err);
+          setStatus('Sorry—something went wrong sending your message. Please try again.', 'error');
+        }
+      });
     })
-    .catch(() => {
-      // Config missing: sending will fail gracefully
-      emailInitialized = false;
+    .catch(err => {
+      console.error(err);
+      setStatus('Email is not configured yet. Please add email-config.json.', 'error');
     });
 
-  // Update counter for optional message
-  const updateCounter = () => {
-    const len = messageEl.value.length;
-    counterEl.textContent = `${len}/300`;
-  };
-
-  // Validate required fields and toggle button state
-  const isFormValid = () => {
-    const nameOk = nameEl.value.trim().length > 0;
-    const phoneOk = phoneEl.value.trim().length > 0;
-    const emailOk = emailEl.value.trim().length > 0 && emailEl.checkValidity();
-    const sizeOk = sizeEl.value.trim().length > 0;
-    const qtyOk = quantityEl.value.trim().length > 0;
-    return nameOk && phoneOk && emailOk && sizeOk && qtyOk;
-  };
-
-  const setButtonDisabled = (disabled) => {
-    submitBtn.disabled = disabled;
-    submitBtn.setAttribute('aria-disabled', String(disabled));
-    if (disabled) {
-      submitBtn.classList.remove('ready');
-    }
-  };
-
-  const updateButtonState = () => {
-    if (isFormValid()) {
-      submitBtn.classList.add('ready'); // yellow + red border
-      submitBtn.disabled = false;
-      submitBtn.setAttribute('aria-disabled', 'false');
-    } else {
-      setButtonDisabled(true); // grey + disabled
-    }
-  };
-
-  // Status helper
-  let hideTimer = null;
-  const showStatus = (msg, isError = false) => {
-    if (hideTimer) clearTimeout(hideTimer);
+  function setStatus(msg, kind) {
     statusEl.textContent = msg;
-    statusEl.classList.toggle('error', isError);
-    statusEl.classList.add('show');
-    hideTimer = setTimeout(() => {
-      statusEl.classList.remove('show');
-      statusEl.textContent = '';
-    }, 2000);
-  };
-
-  // Gather template params for EmailJS
-  const collectParams = () => {
-    const data = {
-      name: nameEl.value.trim(),
-      phone: phoneEl.value.trim(),
-      email: emailEl.value.trim(),
-      size: sizeEl.value.trim(),
-      quantity: quantityEl.value.trim(),
-      message: messageEl.value.trim()
-    };
-    const messageBody = `Granny’s Gift Inquiry
-
-Name: ${data.name}
-Phone Number: ${data.phone}
-Email: ${data.email}
-Size: ${data.size}
-Quantity: ${data.quantity}
-Message (Optional): ${data.message || ''}
-`;
-    return {
-      ...data,
-      message_body: messageBody,
-      to_email_1: 'grannysgiftinc@gmail.com',
-      to_email_2: 'kylekelleyjr@gmail.com'
-    };
-  };
-
-  // Immediately revert button to disabled grey state after click
-  const revertButtonPostClick = () => {
-    setButtonDisabled(true);
-  };
-
-  // Submit handler
-  const handleSubmit = async () => {
-    // Button should immediately revert to grey, no red border, and disable
-    revertButtonPostClick();
-
-    if (!isFormValid()) {
-      // Shouldn't happen because button enabled only when valid, but guard anyway
-      showStatus('Inquiry failed', true);
-      return;
-    }
-
-    const params = collectParams();
-
-    if (!emailInitialized || !emailConfig) {
-      showStatus("Inquiry failed", true);
-      return;
-    }
-
-    try {
-      await emailjs.send(
-        emailConfig.EMAILJS_SERVICE_ID,
-        emailConfig.EMAILJS_TEMPLATE_ID,
-        params
-      );
-      showStatus("Granny's Gift <3", false);
-    } catch (e) {
-      showStatus("Inquiry failed", true);
-    }
-  };
-
-  // Event listeners
-  ['input', 'change'].forEach(ev => {
-    form.addEventListener(ev, () => {
-      updateCounter();
-      updateButtonState();
-    });
-  });
-
-  submitBtn.addEventListener('click', handleSubmit);
-
-  // Initialize UI
-  updateCounter();
-  updateButtonState();
+    statusEl.style.color = kind === 'error' ? '#b00020' : (kind === 'ok' ? '#0a7d0a' : '#333');
+  }
 })();
+JS
+
