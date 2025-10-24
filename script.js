@@ -1,8 +1,11 @@
-// script.js — send form via EmailJS (client-side)
+// script.js — enable/disable submit correctly, message optional, send via EmailJS
 (function () {
   document.addEventListener('DOMContentLoaded', () => {
     const form = document.querySelector('form');
     if (!form) return;
+
+    // make sure native browser validation doesn't block our click UI
+    form.setAttribute('novalidate', '');
 
     const nameEl = document.getElementById('name');
     const phoneEl = document.getElementById('phone');
@@ -11,6 +14,7 @@
     const qtyEl = document.getElementById('quantity');
     const msgEl = document.getElementById('message');
     const countEl = document.getElementById('charCount');
+    const submitBtn = document.getElementById('submitBtn') || form.querySelector('[type="submit"]');
 
     // status region
     let statusEl = document.getElementById('status');
@@ -23,14 +27,37 @@
       form.appendChild(statusEl);
     }
 
-    // live char counter
+    // live char counter (optional field)
     if (msgEl && countEl) {
       const updateCount = () => (countEl.textContent = `${msgEl.value.length}/300`);
       msgEl.addEventListener('input', updateCount);
       updateCount();
     }
 
-    // load config and wire submit
+    // ---- Enable/disable Submit based on required fields only (message is optional) ----
+    const requiredEls = [nameEl, phoneEl, emailEl, sizeEl, qtyEl].filter(Boolean);
+
+    function allRequiredFilled() {
+      return requiredEls.every(el => {
+        const v = (el.value || '').trim();
+        // if it's a select, we also ensure the value isn't a placeholder like ""
+        return v.length > 0 && (el.validity ? el.validity.valid : true);
+      });
+    }
+    function updateSubmitState() {
+      if (!submitBtn) return;
+      submitBtn.disabled = !allRequiredFilled();
+      submitBtn.style.pointerEvents = submitBtn.disabled ? 'none' : 'auto';
+      submitBtn.style.opacity = submitBtn.disabled ? '0.6' : '1';
+    }
+    // watch all required fields
+    requiredEls.forEach(el => {
+      el.addEventListener('input', updateSubmitState);
+      el.addEventListener('change', updateSubmitState);
+    });
+    updateSubmitState(); // set initial state
+
+    // ---- EmailJS wiring (public keys are ok client-side) ----
     fetch('email-config.json', { cache: 'no-store' })
       .then(r => r.json())
       .then(cfg => {
@@ -41,6 +68,13 @@
           e.preventDefault();
           setStatus('');
 
+          // re-check required fields at submit time
+          if (!allRequiredFilled()) {
+            setStatus('Please fill in all required fields.', 'error');
+            return;
+          }
+
+          // gather values
           const name = (nameEl?.value || '').trim();
           const phone = (phoneEl?.value || '').trim();
           const fromEmail = (emailEl?.value || '').trim();
@@ -48,13 +82,11 @@
           const quantity = (qtyEl?.value || '').trim();
           const message = (msgEl?.value || '').trim();
 
-          if (!name || !phone || !fromEmail || !size || !quantity) {
-            return setStatus('Please fill in all required fields.', 'error');
-          }
           if (message.length > 300) {
             return setStatus('Message must be 300 characters or fewer.', 'error');
           }
 
+          // NOTE: recipients now live in the EmailJS template "To" field (static)
           const params = {
             name,
             phone,
@@ -62,10 +94,14 @@
             size,
             quantity,
             message: message || '(no message)',
-            submitted_at: new Date().toLocaleString()
+            submitted_at: new Date().toLocaleString(),
+            // nice to have:
+            reply_to: fromEmail,
+            from_name: name
           };
 
           try {
+            submitBtn && (submitBtn.disabled = true);
             setStatus('Sending…');
             await emailjs.send(cfg.EMAILJS_SERVICE_ID, cfg.EMAILJS_TEMPLATE_ID, params);
             setStatus('Thanks! Your order was sent. We’ll be in touch soon.', 'ok');
@@ -74,6 +110,8 @@
           } catch (err) {
             console.error(err);
             setStatus('Sorry—something went wrong sending your message. Please try again.', 'error');
+          } finally {
+            updateSubmitState(); // restore proper enabled/disabled state after send
           }
         });
       })
