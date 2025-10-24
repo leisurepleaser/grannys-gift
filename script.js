@@ -6,8 +6,8 @@
     const CFG = {
       EMAILJS_PUBLIC_KEY: "fTkyrOb1GWzQ36JvY",
       EMAILJS_SERVICE_ID: "service_5axgx93",
-      EMAILJS_INTERNAL_TEMPLATE_ID: "template_fxankcs",   // to your two inboxes (set in Template "To")
-      EMAILJS_AUTOREPLY_TEMPLATE_ID: "template_autoreply",// To must be {{to_email}}
+      EMAILJS_INTERNAL_TEMPLATE_ID: "template_fxankcs",    // to your two inboxes (set in Template "To")
+      EMAILJS_AUTOREPLY_TEMPLATE_ID: "template_autoreply", // To must be {{to_email}}
       GSHEETS_WEBAPP_URL: ""                               // optional: paste your Apps Script Web App URL
     };
     // =========================================================
@@ -16,15 +16,23 @@
     if (!form) return;
 
     // Inputs
-    const nameEl = document.getElementById('name');
-    const phoneEl = document.getElementById('phone');
-    const emailEl = document.getElementById('email');
-    const sizeEl = document.getElementById('size');
-    const qtyEl = document.getElementById('quantity');
-    const msgEl = document.getElementById('message');
-    const hpEl = document.getElementById('website'); // honeypot
-    const countEl = document.getElementById('charCount');
-    const submitBtn = document.getElementById('submitBtn');
+    const nameEl   = document.getElementById('name');
+    const phoneEl  = document.getElementById('phone');
+    const emailEl  = document.getElementById('email');
+    const sizeEl   = document.getElementById('size');
+    const qtyEl    = document.getElementById('quantity');
+      // Force Quantity dropdown to 1–20 (overrides any old HTML)
+      (function buildQuantityOptions(max = 20) {
+        if (!qtyEl) return;
+        let html = '<option value="" selected disabled>Choose qty…</option>';
+        for (let i = 1; i <= max; i++) html += `<option value="${i}">${i}</option>`;
+        qtyEl.innerHTML = html;
+      })();
+
+    const msgEl    = document.getElementById('message');
+    const hpEl     = document.getElementById('website'); // honeypot
+    const countEl  = document.getElementById('charCount');
+    const submitBtn= document.getElementById('submitBtn');
     const statusEl = document.getElementById('status');
 
     // Success panel + summary (create if missing so feature works regardless of HTML)
@@ -49,8 +57,33 @@
       successPanel.appendChild(summaryEl);
     }
 
-    // Live total element
-    const totalEl = document.getElementById('orderTotal');
+    // ---- Ensure the "Estimated total" UI exists just above the Submit button ----
+    let totalEl = document.getElementById('orderTotal');
+    if (!totalEl) {
+      const row = document.createElement('div');
+      row.className = 'total-row';
+      totalEl = document.createElement('div');
+      totalEl.id = 'orderTotal';
+      totalEl.className = 'total-box';
+      totalEl.textContent = 'Estimated total: —';
+      // Inline fallback styles (in case CSS wasn’t added)
+      totalEl.style.background = totalEl.style.background || '#fff8e1';
+      totalEl.style.border = totalEl.style.border || '1px solid #ffe082';
+      totalEl.style.borderRadius = totalEl.style.borderRadius || '10px';
+      totalEl.style.padding = totalEl.style.padding || '8px 12px';
+      totalEl.style.fontWeight = totalEl.style.fontWeight || '700';
+      row.style.display = row.style.display || 'flex';
+      row.style.justifyContent = row.style.justifyContent || 'flex-end';
+      row.style.margin = row.style.margin || '10px 0 8px';
+
+      row.appendChild(totalEl);
+      // insert right before the submit button
+      if (submitBtn && submitBtn.parentNode) {
+        submitBtn.parentNode.insertBefore(row, submitBtn);
+      } else {
+        form.appendChild(row);
+      }
+    }
 
     // Currency formatter
     const fmtUSD = new Intl.NumberFormat('en-US', { style: 'currency', currency: 'USD' });
@@ -82,11 +115,45 @@
       submitBtn.disabled = !ready;
       submitBtn.classList.toggle('ready', ready); // yellow + red border when ready
     }
+
+    // ---- Price helpers ----
+    function getPriceForSize() {
+      // 1) Prefer data-price on the selected <option>
+      const opt = sizeEl.options[sizeEl.selectedIndex];
+      let price = parseFloat(opt?.dataset?.price);
+      if (Number.isFinite(price)) return price;
+
+      // 2) Fallback by label text (in case HTML options lack data-price)
+      const label = (opt?.textContent || '').toLowerCase();
+      if (label.includes('whole'))   return 34.99;
+      if (label.includes('cupcake')) return 5.99;
+      return 0;
+    }
+
+    function updateTotalUI() {
+      if (!totalEl) return;
+      const sizePicked = !!(sizeEl && sizeEl.value);
+      const qtyPicked  = !!(qtyEl && qtyEl.value);
+      if (sizePicked && qtyPicked) {
+        const qty = Number((qtyEl.value || '').trim());
+        const priceEach = getPriceForSize();
+        if (priceEach > 0 && qty > 0) {
+          const total = priceEach * qty;
+          totalEl.textContent = `Estimated total: ${fmtUSD.format(total)}`;
+          return;
+        }
+      }
+      totalEl.textContent = 'Estimated total: —';
+    }
+
+    // Watch inputs and selects; update both button state and total
     requiredEls.forEach(el => {
       el.addEventListener('input', () => { updateSubmitState(); updateTotalUI(); });
       el.addEventListener('change', () => { updateSubmitState(); updateTotalUI(); });
     });
+    // initialize once on load
     updateSubmitState();
+    updateTotalUI();
 
     // Spam guards: honeypot + min time + simple rate limit
     const pageLoadedAt = Date.now();
@@ -100,25 +167,6 @@
     function markSubmittedNow() {
       localStorage.setItem('gg_last_submit_ts', String(Date.now()));
     }
-
-    // Price helpers
-    function getPriceForSize() {
-      const opt = sizeEl.options[sizeEl.selectedIndex];
-      return parseFloat(opt?.dataset?.price || "0");
-    }
-    function updateTotalUI() {
-      if (!totalEl) return;
-      const qty = Number((qtyEl.value || '').trim());
-      const priceEach = getPriceForSize();
-      if (priceEach > 0 && qty > 0) {
-        const total = priceEach * qty;
-        totalEl.textContent = `Estimated total: ${fmtUSD.format(total)}`;
-      } else {
-        totalEl.textContent = 'Estimated total: —';
-      }
-    }
-    // initialize total once on load
-    updateTotalUI();
 
     // EmailJS init
     if (!window.emailjs) {
@@ -148,8 +196,8 @@
       // Params for internal notification (recipients STATIC in EmailJS Template “To”)
       const internalParams = {
         name, phone, email: fromEmail, size, quantity,
-        price_each: fmtUSD.format(priceEach),
-        total: isFinite(total) ? fmtUSD.format(total) : '—',
+        price_each: new Intl.NumberFormat('en-US', { style: 'currency', currency: 'USD' }).format(priceEach),
+        total: isFinite(total) ? new Intl.NumberFormat('en-US', { style: 'currency', currency: 'USD' }).format(total) : '—',
         message: message || '(no message)',
         submitted_at: new Date().toLocaleString(),
         reply_to: fromEmail,
@@ -162,8 +210,8 @@
         name,
         size,
         quantity,
-        price_each: fmtUSD.format(priceEach),
-        total: isFinite(total) ? fmtUSD.format(total) : '—',
+        price_each: internalParams.price_each,
+        total: internalParams.total,
         submitted_at: new Date().toLocaleString()
       };
 
