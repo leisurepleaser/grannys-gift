@@ -1,20 +1,21 @@
-// Restores yellow + red-border UX; adds spam guard; sends internal email,
-// auto-reply to customer, optional Google Sheets log; shows a success summary.
+// script.js — shows a post-submit summary, keeps yellow+red-border UX,
+// sends internal email + auto-reply, optional Sheets logging, and spam guard.
 (function () {
   document.addEventListener('DOMContentLoaded', () => {
-    const form = document.getElementById('orderForm');
-    if (!form) return;
-
-    // ====== CONFIG (edit IDs if you changed them in EmailJS) ======
+    // ====== EDIT THESE IF YOUR EMAILJS IDs ARE DIFFERENT ======
     const CFG = {
       EMAILJS_PUBLIC_KEY: "fTkyrOb1GWzQ36JvY",
       EMAILJS_SERVICE_ID: "service_5axgx93",
-      EMAILJS_INTERNAL_TEMPLATE_ID: "template_fxankcs",   // goes to your two inboxes (set in Template "To")
+      EMAILJS_INTERNAL_TEMPLATE_ID: "template_fxankcs",   // to your two inboxes (set in Template "To")
       EMAILJS_AUTOREPLY_TEMPLATE_ID: "template_autoreply",// To must be {{to_email}}
       GSHEETS_WEBAPP_URL: ""                               // optional: paste your Apps Script Web App URL
     };
-    // =============================================================
+    // =========================================================
 
+    const form = document.getElementById('orderForm');
+    if (!form) return;
+
+    // Inputs
     const nameEl = document.getElementById('name');
     const phoneEl = document.getElementById('phone');
     const emailEl = document.getElementById('email');
@@ -25,23 +26,45 @@
     const countEl = document.getElementById('charCount');
     const submitBtn = document.getElementById('submitBtn');
     const statusEl = document.getElementById('status');
-    const successPanel = document.getElementById('successPanel');
-    const summaryEl = document.getElementById('summary');
 
-    // price helper (from <option data-price>)
-    function getPriceForSize() {
-      const opt = sizeEl.options[sizeEl.selectedIndex];
-      return parseFloat(opt?.dataset?.price || "0");
+    // Success panel + summary (create if missing so this works even without HTML changes)
+    let successPanel = document.getElementById('successPanel');
+    let summaryEl = document.getElementById('summary');
+    if (!successPanel) {
+      successPanel = document.createElement('div');
+      successPanel.id = 'successPanel';
+      successPanel.hidden = true;
+      successPanel.innerHTML = `
+        <h2>Thank you!</h2>
+        <p>We’ve received your inquiry and sent you a confirmation email.
+        We’ll reply within <strong>1–3 business days</strong>.</p>
+        <div id="summary"></div>
+        <p class="muted">Need to add details? Just reply to the confirmation email.</p>
+      `;
+      form.parentNode.insertBefore(successPanel, form);
+    }
+    if (!summaryEl) {
+      summaryEl = document.createElement('div');
+      summaryEl.id = 'summary';
+      successPanel.appendChild(summaryEl);
     }
 
-    // live char counter
+    // Status helper
+    function setStatus(msg, kind) {
+      if (!statusEl) return;
+      statusEl.textContent = msg || '';
+      statusEl.classList.toggle('ok', kind === 'ok');
+      statusEl.classList.toggle('error', kind === 'error');
+    }
+
+    // Live char counter
     if (msgEl && countEl) {
       const updateCount = () => (countEl.textContent = `${msgEl.value.length}/300`);
       msgEl.addEventListener('input', updateCount);
       updateCount();
     }
 
-    // ready state (message optional)
+    // Enable/disable submit (message optional)
     const requiredEls = [nameEl, phoneEl, emailEl, sizeEl, qtyEl];
     function allRequiredFilled() {
       const hasVal = el => !!(el && (el.value || '').trim());
@@ -51,7 +74,7 @@
     function updateSubmitState() {
       const ready = allRequiredFilled();
       submitBtn.disabled = !ready;
-      submitBtn.classList.toggle('ready', ready);
+      submitBtn.classList.toggle('ready', ready); // yellow + red border when ready
     }
     requiredEls.forEach(el => {
       el.addEventListener('input', updateSubmitState);
@@ -72,6 +95,12 @@
       localStorage.setItem('gg_last_submit_ts', String(Date.now()));
     }
 
+    // Price helper (from <option data-price>)
+    function getPriceForSize() {
+      const opt = sizeEl.options[sizeEl.selectedIndex];
+      return parseFloat(opt?.dataset?.price || "0");
+    }
+
     // EmailJS init
     if (!window.emailjs) {
       setStatus("Email system isn't loaded. Please refresh.", 'error');
@@ -79,10 +108,11 @@
     }
     emailjs.init({ publicKey: CFG.EMAILJS_PUBLIC_KEY });
 
+    // Submit handler
     form.addEventListener('submit', async (e) => {
       e.preventDefault();
 
-      // front-end validation
+      // Validation
       if (!allRequiredFilled()) { setStatus('Please fill in all required fields.', 'error'); return; }
       if ((msgEl.value || '').length > 300) { setStatus('Message must be 300 characters or fewer.', 'error'); return; }
       if (isSpammy()) { setStatus('Something went wrong. Please try again in a moment.', 'error'); return; }
@@ -93,7 +123,7 @@
       const size = sizeEl.value.trim();
       const quantity = qtyEl.value.trim();
       const message = (msgEl.value || '').trim();
-      const priceEach = getPriceForSize(); // number
+      const priceEach = getPriceForSize();
       const total = priceEach * Number(quantity || 0);
 
       // Params for internal notification (recipients STATIC in EmailJS Template “To”)
@@ -130,7 +160,7 @@
         if (CFG.EMAILJS_AUTOREPLY_TEMPLATE_ID) {
           emailjs
             .send(CFG.EMAILJS_SERVICE_ID, CFG.EMAILJS_AUTOREPLY_TEMPLATE_ID, autoReplyParams)
-            .catch(() => {});
+            .catch(() => {}); // do not block success UI if auto-reply fails
         }
 
         // 3) Log to Google Sheets (optional)
@@ -146,12 +176,12 @@
           }).catch(() => {});
         }
 
-        // Success UI
-        markSubmittedNow();
-        renderSummary({ name, phone, fromEmail, size, quantity, priceEach, total, message });
+        // --- Success UI: render summary & show panel ---
+        renderSummary({ name, email: fromEmail, phone, size, quantity, priceEach, total, message });
         form.hidden = true;
         successPanel.hidden = false;
         setStatus('', ''); // clear inline status (panel is the success now)
+        markSubmittedNow();
         window.scrollTo({ top: 0, behavior: 'smooth' });
       } catch (err) {
         console.error(err);
@@ -160,25 +190,20 @@
       }
     });
 
-    function setStatus(msg, kind) {
-      statusEl.textContent = msg || '';
-      statusEl.classList.toggle('ok', kind === 'ok');
-      statusEl.classList.toggle('error', kind === 'error');
-    }
-
-    function renderSummary({ name, phone, fromEmail, size, quantity, priceEach, total, message }) {
+    // Summary renderer
+    function renderSummary({ name, email, phone, size, quantity, priceEach, total, message }) {
       summaryEl.innerHTML = `
         <dl>
           <dt>Name</dt><dd>${escapeHtml(name)}</dd>
-          <dt>Email</dt><dd>${escapeHtml(fromEmail)}</dd>
+          <dt>Email</dt><dd>${escapeHtml(email)}</dd>
           <dt>Phone</dt><dd>${escapeHtml(phone)}</dd>
-          <dt>Size</dt><dd>${escapeHtml(size)} (${priceEach ? '$'+priceEach.toFixed(2) : '—'})</dd>
+          <dt>Size</dt><dd>${escapeHtml(size)} ${priceEach ? `($${priceEach.toFixed(2)})` : ''}</dd>
           <dt>Quantity</dt><dd>${escapeHtml(quantity)}</dd>
-          <dt>Total</dt><dd>${isFinite(total) ? '$'+total.toFixed(2) : '—'}</dd>
+          <dt>Total</dt><dd>${isFinite(total) ? '$' + total.toFixed(2) : '—'}</dd>
           <dt>Message</dt><dd>${escapeHtml(message || '(no message)')}</dd>
         </dl>`;
     }
-    function escapeHtml(s=''){ return s.replace(/[&<>"']/g, c=>({ '&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;', "'":'&#39;' }[c])); }
+    function escapeHtml(s=''){ return s.replace(/[&<>"']/g, c => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;', "'":'&#39;'}[c])); }
   });
 })();
 

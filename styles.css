@@ -39,3 +39,7 @@ textarea { resize:vertical; }
 .summary dt { color:#555; font-weight:600; }
 .summary dd { margin:0; }
 
+#successPanel { background:#fafafa; border:1px solid #eee; border-radius:12px; padding:16px; margin-bottom:12px; }
+#summary dl { margin:0; display:grid; grid-template-columns:140px 1fr; gap:8px 12px; }
+#summary dt { font-weight:600; color:#555; }
+#summary dd { margin:0; }
