@@ -14,7 +14,7 @@ document.addEventListener('DOMContentLoaded', () => {
     EMAILJS_AUTOREPLY_TEMPLATE_ID: "template_autoreply",  // customer confirmation (optional)
 
     // Newsletter email (new)
-    EMAILJS_NEWSLETTER_TEMPLATE_ID: "template_newsletter",// internal notify to grannysgiftinc@gmail.com
+    EMAILJS_NEWSLETTER_TEMPLATE_ID: "template_p7tmtwl",// internal notify to grannysgiftinc@gmail.com
 
     // Optional Google Apps Script endpoint for logging (leave empty to disable)
     GSHEETS_WEBAPP_URL: ""
