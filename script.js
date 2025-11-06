@@ -1,5 +1,4 @@
-// script.js — keeps order flow + live total + summary; adds newsletter signup;
-// forces quantity 1–20; spam guards; EmailJS internal + auto-reply + newsletter.
+// script.js — order flow unchanged; newsletter = email-only; no wallpaper logic anywhere.
 (function () {
   document.addEventListener('DOMContentLoaded', () => {
     // ====== CONFIG ======
@@ -7,8 +6,8 @@
       EMAILJS_PUBLIC_KEY: "fTkyrOb1GWzQ36JvY",
       EMAILJS_SERVICE_ID: "service_5axgx93",
       EMAILJS_INTERNAL_TEMPLATE_ID: "template_fxankcs",     // internal order notification
-      EMAILJS_AUTOREPLY_TEMPLATE_ID: "template_autoreply",  // customer auto-reply (To={{to_email}})
-      EMAILJS_NEWSLETTER_TEMPLATE_ID: "template_newsletter",// NEW: newsletter signups
+      EMAILJS_AUTOREPLY_TEMPLATE_ID: "template_autoreply",  // order auto-reply (To={{to_email}})
+      EMAILJS_NEWSLETTER_TEMPLATE_ID: "template_newsletter",// newsletter signups (email-only)
       GSHEETS_WEBAPP_URL: ""                                // optional logging
     };
     // =====================
@@ -16,19 +15,19 @@
     const form      = document.getElementById('orderForm');
     if (!form) return;
 
-    // Inputs (order)
+    // Order inputs
     const nameEl    = document.getElementById('name');
     const phoneEl   = document.getElementById('phone');
     const emailEl   = document.getElementById('email');
     const sizeEl    = document.getElementById('size');
     const qtyEl     = document.getElementById('quantity');
     const msgEl     = document.getElementById('message');
-    const hpEl      = document.getElementById('website'); // honeypot
+    const hpEl      = document.getElementById('website');
     const countEl   = document.getElementById('charCount');
     const submitBtn = document.getElementById('submitBtn');
     const statusEl  = document.getElementById('status');
 
-    // Success panel + summary (ensure exists)
+    // Success + summary (ensure exist)
     let successPanel = document.getElementById('successPanel');
     let summaryEl    = document.getElementById('summary');
     if (!successPanel) {
@@ -44,13 +43,9 @@
       `;
       form.parentNode.insertBefore(successPanel, form);
     }
-    if (!summaryEl) {
-      summaryEl = document.createElement('div');
-      summaryEl.id = 'summary';
-      successPanel.appendChild(summaryEl);
-    }
+    if (!summaryEl) { summaryEl = document.createElement('div'); summaryEl.id = 'summary'; successPanel.appendChild(summaryEl); }
 
-    // Live total box (ensure exists)
+    // Live total UI (ensure exists)
     let totalEl = document.getElementById('orderTotal');
     if (!totalEl) {
       const row = document.createElement('div');
@@ -75,11 +70,10 @@
     // Char counter
     if (msgEl && countEl) {
       const updateCount = () => (countEl.textContent = `${msgEl.value.length}/300`);
-      msgEl.addEventListener('input', updateCount);
-      updateCount();
+      msgEl.addEventListener('input', updateCount); updateCount();
     }
 
-    // Ready state
+    // Enable/disable submit
     const requiredEls = [nameEl, phoneEl, emailEl, sizeEl, qtyEl];
     function allRequiredFilled() {
       const hasVal = el => !!(el && (el.value || '').trim());
@@ -92,11 +86,11 @@
       submitBtn.classList.toggle('ready', ready);
     }
 
-    // Price helpers
+    // Prices
     function getPriceForSize() {
       const opt = sizeEl.options[sizeEl.selectedIndex];
-      let price = parseFloat(opt?.dataset?.price);
-      if (Number.isFinite(price)) return price;
+      const p = parseFloat(opt?.dataset?.price);
+      if (Number.isFinite(p)) return p;
       const label = (opt?.textContent || '').toLowerCase();
       if (label.includes('whole'))   return 34.99;
       if (label.includes('cupcake')) return 5.99;
@@ -104,22 +98,19 @@
     }
     function updateTotalUI() {
       if (!totalEl) return;
-      const sizePicked = !!(sizeEl && sizeEl.value);
-      const qtyPicked  = !!(qtyEl && qtyEl.value);
+      const sizePicked = !!sizeEl.value;
+      const qtyPicked  = !!qtyEl.value;
       if (sizePicked && qtyPicked) {
-        const qty = Number((qtyEl.value || '').trim());
+        const qty = Number(qtyEl.value);
         const priceEach = getPriceForSize();
-        if (priceEach > 0 && qty > 0) {
-          totalEl.textContent = `Estimated total: ${fmtUSD.format(priceEach * qty)}`;
-          return;
-        }
+        if (priceEach > 0 && qty > 0) { totalEl.textContent = `Estimated total: ${fmtUSD.format(priceEach * qty)}`; return; }
       }
       totalEl.textContent = 'Estimated total: —';
     }
 
     // FORCE Quantity to 1–20
     (function enforceQuantityMax(max = 20) {
-      const el = document.getElementById('quantity') || document.querySelector('select[name="quantity"]');
+      const el = document.getElementById('quantity');
       if (!el) return;
       const prev = parseInt(el.value, 10);
       let html = '<option value="" selected disabled>Choose qty…</option>';
@@ -128,7 +119,6 @@
       if (Number.isInteger(prev) && prev >= 1 && prev <= max) el.value = String(prev);
     })();
 
-    // Input watchers
     [nameEl, phoneEl, emailEl, sizeEl, qtyEl].forEach(el => {
       el.addEventListener('input', () => { updateSubmitState(); updateTotalUI(); });
       el.addEventListener('change', () => { updateSubmitState(); updateTotalUI(); });
@@ -138,15 +128,13 @@
     // Spam guards
     const pageLoadedAt = Date.now();
     function isSpammy() {
-      if (document.getElementById('website')?.value.trim()) return true;
+      if (hpEl?.value.trim()) return true;
       if (Date.now() - pageLoadedAt < 2500) return true;
       const last = Number(localStorage.getItem('gg_last_submit_ts') || 0);
       if (Date.now() - last < 45_000) return true;
       return false;
     }
-    function markSubmittedNow() {
-      localStorage.setItem('gg_last_submit_ts', String(Date.now()));
-    }
+    function markSubmittedNow(){ localStorage.setItem('gg_last_submit_ts', String(Date.now())); }
 
     // EmailJS
     if (!window.emailjs) { setStatus("Email system isn't loaded. Please refresh.", 'error'); return; }
@@ -178,28 +166,23 @@
         from_name: name
       };
       const autoReplyParams = {
-        to_email: fromEmail,
-        name, size, quantity,
+        to_email: fromEmail, name, size, quantity,
         price_each: fmtUSD.format(priceEach),
         total: isFinite(total) ? fmtUSD.format(total) : '—',
         submitted_at: new Date().toLocaleString()
       };
 
       try {
-        submitBtn.disabled = true;
-        submitBtn.classList.remove('ready');
+        submitBtn.disabled = true; submitBtn.classList.remove('ready');
         setStatus('Sending…');
 
         await emailjs.send(CFG.EMAILJS_SERVICE_ID, CFG.EMAILJS_INTERNAL_TEMPLATE_ID, internalParams);
-
         if (CFG.EMAILJS_AUTOREPLY_TEMPLATE_ID) {
-          emailjs.send(CFG.EMAILJS_SERVICE_ID, CFG.EMAILJS_AUTOREPLY_TEMPLATE_ID, autoReplyParams)
-                 .catch(()=>{});
+          emailjs.send(CFG.EMAILJS_SERVICE_ID, CFG.EMAILJS_AUTOREPLY_TEMPLATE_ID, autoReplyParams).catch(()=>{});
         }
         if (CFG.GSHEETS_WEBAPP_URL) {
           fetch(CFG.GSHEETS_WEBAPP_URL, {
-            method: 'POST',
-            headers: {'Content-Type':'application/json'},
+            method:'POST', headers:{'Content-Type':'application/json'},
             body: JSON.stringify({
               name, email: fromEmail, phone, size,
               price_each: priceEach, quantity: Number(quantity || 0), total,
@@ -209,19 +192,13 @@
         }
 
         renderSummary({ name, email: fromEmail, phone, size, quantity, priceEach, total, message });
-        form.hidden = true;
-        successPanel.hidden = false;
-        setStatus('', '');
-        markSubmittedNow();
+        form.hidden = true; successPanel.hidden = false; setStatus('', ''); markSubmittedNow();
         window.scrollTo({ top: 0, behavior: 'smooth' });
       } catch (err) {
-        console.error(err);
-        setStatus('Inquiry failed. Please try again.', 'error');
-        updateSubmitState();
+        console.error(err); setStatus('Inquiry failed. Please try again.', 'error'); updateSubmitState();
       }
     });
 
-    // Summary renderer
     function renderSummary({ name, email, phone, size, quantity, priceEach, total, message }) {
       summaryEl.innerHTML = `
         <dl>
@@ -236,16 +213,15 @@
     }
     function escapeHtml(s=''){ return s.replace(/[&<>"']/g, c => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;', "'":'&#39;'}[c])); }
 
-    // ============== NEWSLETTER SIGN-UP ==============
+    // ===== NEWSLETTER (email only) =====
     const nForm    = document.getElementById('newsletterForm');
-    const nlName   = document.getElementById('nl_name');
     const nlEmail  = document.getElementById('nl_email');
     const nlHP     = document.getElementById('nl_website');
     const nlBtn    = document.getElementById('nl_submit');
     const nlStatus = document.getElementById('nl_status');
 
-    function nlReady() { return !!nlEmail?.value && nlEmail.checkValidity(); }
-    function nlSetStatus(msg, kind) {
+    function nlReady(){ return !!nlEmail?.value && nlEmail.checkValidity(); }
+    function nlSetStatus(msg, kind){
       nlStatus.textContent = msg || '';
       nlStatus.classList.toggle('ok', kind === 'ok');
       nlStatus.classList.toggle('error', kind === 'error');
@@ -260,12 +236,8 @@
         if (nlHP?.value.trim()) return; // honeypot
         if (!nlReady()) { nlSetStatus('Enter a valid email.', 'error'); return; }
 
-        const params = {
-          name: (nlName?.value || '').trim(),
-          email: nlEmail.value.trim(),
-          reply_to: nlEmail.value.trim(),
-          submitted_at: new Date().toLocaleString()
-        };
+        const email = nlEmail.value.trim();
+        const params = { email, reply_to: email, submitted_at: new Date().toLocaleString() };
 
         try {
           nlBtn.disabled = true; nlBtn.classList.remove('ready'); nlSetStatus('Joining…');

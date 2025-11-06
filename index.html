@@ -5,7 +5,7 @@
   <meta name="viewport" content="width=device-width, initial-scale=1" />
   <title>Granny’s Gift</title>
 
-  <!-- Inline favicon (emoji) -->
+  <!-- inline favicon -->
   <link rel="icon"
         href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 64 64'%3E%3Ctext y='50%25' x='50%25' dominant-baseline='middle' text-anchor='middle' font-size='48'%3E%F0%9F%8D%B0%3C/text%3E%3C/svg%3E">
 
@@ -13,34 +13,22 @@
 </head>
 <body>
 
-    <!-- Wallpaper rails (desktop) -->
-    <div class="rails" aria-hidden="true">
-      <aside class="rail left">
-        <img src="images/DSC_9628.JPG" alt="" loading="lazy">
-        <img src="images/IMG_1669.jpg" alt="" loading="lazy">
-        <img src="images/DSC_9629.JPG" alt="" loading="lazy">
-        <img src="images/IMG_1669.jpg" alt="" loading="lazy">
-      </aside>
-      <aside class="rail right">
-        <img src="images/DSC_9629.JPG" alt="" loading="lazy">
-        <img src="images/IMG_1669.jpg" alt="" loading="lazy">
-        <img src="images/DSC_9628.JPG" alt="" loading="lazy">
-        <img src="images/IMG_1669.jpg" alt="" loading="lazy">
-      </aside>
-    </div>
+  <!-- SIMPLE HEADER (no wallpaper) -->
+  <header class="brand-hero">
+    <img src="images/grannysgift_banner.png" alt="Granny’s Gift banner" loading="eager" decoding="async">
+  </header>
 
-    <header class="brand-hero">
-      <!-- keep the same filename you actually saved; .png vs .PNG must match -->
-      <img src="images/grannysgift_banner.png" alt="Granny’s Gift banner" loading="eager" decoding="async">
-    </header>
+  <main class="wrap">
+    <section class="card" role="region" aria-labelledby="title">
+      <h1 id="title">Granny’s Gift</h1>
 
-    <!-- Mobile gallery (phones only) -->
-    <div class="mobile-gallery">
-      <img src="images/DSC_9628.JPG" alt="Whole 7UP pound cake">
-      <img src="images/IMG_1669.jpg" alt="Jumbo cupcakes cooling on a rack">
-      <img src="images/DSC_9629.JPG" alt="Whole 7UP pound cake (alternate)">
-      <img src="images/IMG_1669.jpg" alt="Jumbo cupcakes cooling on a rack">
-    </div>
+      <!-- Optional product gallery for phones (NOT wallpaper) -->
+      <div class="mobile-gallery">
+        <img src="images/DSC_9628.JPG" alt="Whole 7UP pound cake">
+        <img src="images/IMG_1669.jpg" alt="Jumbo cupcakes cooling on a rack">
+        <img src="images/DSC_9629.JPG" alt="Whole 7UP pound cake (alternate)">
+        <img src="images/IMG_1669.jpg" alt="Jumbo cupcakes cooling on a rack">
+      </div>
 
       <!-- Success panel (after submit) -->
       <div id="successPanel" class="success-panel" hidden>
@@ -83,7 +71,6 @@
           <label for="quantity">Quantity <span class="req" aria-hidden="true">*</span></label>
           <select id="quantity" name="quantity" required>
             <option value="" selected disabled>Choose qty…</option>
-            <!-- JS will enforce 1–20 even if this file cached -->
             <option value="1">1</option><option value="2">2</option><option value="3">3</option>
             <option value="4">4</option><option value="5">5</option><option value="6">6</option>
             <option value="7">7</option><option value="8">8</option><option value="9">9</option>
@@ -114,7 +101,7 @@
 
       <hr class="divider" />
 
-      <!-- Ingredients (banner-inspired theme) -->
+      <!-- Ingredients -->
       <section id="ingredients" class="info ingredients-card" aria-labelledby="ing-title">
         <h2 id="ing-title">Ingredients & Allergens</h2>
         <ul class="ingredients-list" role="list">
@@ -130,7 +117,7 @@
         <p class="muted">Allergens are bolded. Made in a Washington State home kitchen.</p>
       </section>
 
-      <!-- Contact (fruit border) -->
+      <!-- Contact -->
       <section id="contact" class="info contact-card" aria-labelledby="contact-title">
         <h2 id="contact-title">Contact us</h2>
         <ul class="contact-list">
@@ -139,22 +126,16 @@
         </ul>
       </section>
 
-      <!-- Newsletter sign-up -->
+      <!-- Newsletter (EMAIL ONLY; no extra field) -->
       <section id="newsletter" class="info newsletter-card" aria-labelledby="news-title">
         <h2 id="news-title">Get news & sales</h2>
         <form id="newsletterForm" novalidate>
           <div class="row">
-            <label for="nl_name">Name (optional)</label>
-            <input id="nl_name" name="nl_name" type="text" autocomplete="name" />
-          </div>
-          <div class="row">
             <label for="nl_email">Email <span class="req" aria-hidden="true">*</span></label>
             <input id="nl_email" name="nl_email" type="email" autocomplete="email" required />
           </div>
-
           <!-- Honeypot -->
           <input id="nl_website" name="nl_website" autocomplete="off" tabindex="-1" class="hp" aria-hidden="true" />
-
           <button id="nl_submit" type="submit" class="btn small" disabled>Join the list</button>
           <div id="nl_status" role="status" aria-live="polite" class="status"></div>
         </form>
@@ -163,7 +144,6 @@
     </section>
   </main>
 
-  <!-- EmailJS SDK + JS -->
   <script src="https://cdn.jsdelivr.net/npm/@emailjs/browser@4/dist/email.min.js"></script>
   <script defer src="script.js"></script>
 </body>
