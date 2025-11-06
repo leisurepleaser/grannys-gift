@@ -16,7 +16,10 @@
   <!-- Brand banner (fits, no crop) -->
   <header class="brand-hero">
     <img src="images/grannysgift_banner.png" alt="Granny’s Gift banner" loading="eager" decoding="async">
+    <!-- NEW: seasonal sticker -->
+    <div class="promo-sticker">Thanksgiving preorders <strong>AVAILABLE</strong></div>
   </header>
+
 
   <main class="wrap">
     <!-- Two-column hero: left = order form; right = whole-cake image -->
@@ -131,16 +134,26 @@
         </section>
       </section>
 
-      <!-- RIGHT: Whole cake image (fits; never cropped) -->
-      <aside class="product-hero card" aria-label="Product photo">
+      <!-- RIGHT: Whole cake image + short menu -->
+      <aside class="product-hero card" aria-label="Product photo and menu">
         <figure class="hero-figure">
           <img class="hero-cake"
                src="images/DSC_9628.JPG"
                alt="Whole 7UP pound cake – Granny’s Gift">
-          <figcaption class="muted">Whole 7UP Pound Cake</figcaption>
+          <figcaption class="muted">Whole 7UP Pound Cake — <strong>10-inch</strong></figcaption>
         </figure>
+
+        <!-- NEW: short pricing menu -->
+        <div class="menu-card">
+          <h3 class="menu-title">Menu & Pricing</h3>
+          <ul class="menu-list" role="list">
+            <li><span>Whole Cake (10&quot;)</span><span>$34.99</span></li>
+            <li><span>Cupcake (Jumbo)</span><span>$5.99</span></li>
+          </ul>
+          <p class="menu-note tiny muted">Local pickup near Sea-Tac. Tax may apply.</p>
+        </div>
       </aside>
-    </section>
+
 
     <!-- BELOW: Larger (but screen-friendly) gallery -->
     <section class="gallery card" aria-labelledby="gallery-title">
