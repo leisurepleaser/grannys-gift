@@ -213,50 +213,94 @@
     }
     function escapeHtml(s=''){ return s.replace(/[&<>"']/g, c => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;', "'":'&#39;'}[c])); }
 
-      // ===== NEWSLETTER (optional name + required email; no visible status field needed) =====
-      const nForm    = document.getElementById('newsletterForm');
-      const nlName   = document.getElementById('nl_name');
-      const nlEmail  = document.getElementById('nl_email');
-      const nlHP     = document.getElementById('nl_website');
-      const nlBtn    = document.getElementById('nl_submit');     // may be disabled until valid
-      const nlStatus = document.getElementById('nl_status');      // may not exist; guard below
+      // ===== NEWSLETTER: send email + show confirmation =====
+      (() => {
+        const nWrap    = document.getElementById('newsletter');      // section wrapper
+        const nForm    = document.getElementById('newsletterForm');
+        const nlName   = document.getElementById('nl_name');
+        const nlEmail  = document.getElementById('nl_email');
+        const nlHP     = document.getElementById('nl_website');      // honeypot
+        const nlBtn    = document.getElementById('nl_submit');
 
-      function nlReady(){ return !!nlEmail?.value && nlEmail.checkValidity(); }
-      function nlSetStatus(msg, kind){
-        if (!nlStatus) return;               // if no status node, silently skip UI messages
-        nlStatus.textContent = msg || '';
-        nlStatus.classList.toggle('ok', kind === 'ok');
-        nlStatus.classList.toggle('error', kind === 'error');
-      }
+        if (!nForm || !window.emailjs) return;
 
-      if (nForm) {
-        const updateNL = () => { nlBtn.disabled = !nlReady(); nlBtn.classList.toggle('ready', nlReady()); };
-        nlEmail?.addEventListener('input', updateNL); updateNL();
+        // Ensure your template ID is set
+        if (!CFG.EMAILJS_NEWSLETTER_TEMPLATE_ID) {
+          CFG.EMAILJS_NEWSLETTER_TEMPLATE_ID = "template_p7tmtwl";
+        }
+
+        const ready = () => !!nlEmail?.value && nlEmail.checkValidity();
+        const updateBtn = () => { nlBtn.disabled = !ready(); nlBtn.classList.toggle('ready', ready()); };
+        nlEmail?.addEventListener('input', updateBtn);
+        updateBtn();
+
+        function escapeHtml(s=''){ return s.replace(/[&<>"']/g, c => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;', "'":'&#39;'}[c])); }
 
         nForm.addEventListener('submit', async (e) => {
           e.preventDefault();
-          if (nlHP?.value.trim()) return; // honeypot
-          if (!nlReady()) { nlSetStatus('Enter a valid email.', 'error'); return; }
+          if (nlHP?.value.trim()) return;     // bot caught
+          if (!ready()) return;
 
+          const name  = (nlName?.value || '').trim();
+          const email = nlEmail.value.trim();
+
+          // Build params for template_newsletter
           const params = {
-            name: (nlName?.value || '').trim(),
-            email: nlEmail.value.trim(),
-            reply_to: nlEmail.value.trim(),
-            submitted_at: new Date().toLocaleString()
+            name,
+            email,
+            reply_to: email,                          // makes replies go to subscriber
+            submitted_at: new Date().toLocaleString(),
+            user_agent: navigator.userAgent,
+            page: location.href
           };
 
           try {
-            nlBtn.disabled = true; nlBtn.classList.remove('ready'); nlSetStatus('Joining…');
-            await emailjs.send(CFG.EMAILJS_SERVICE_ID, CFG.EMAILJS_NEWSLETTER_TEMPLATE_ID, params);
-            nlSetStatus('You’re on the list! Check your email for a welcome note.', 'ok');
-            nForm.reset(); updateNL();
+            nlBtn.disabled = true; nlBtn.classList.remove('ready');
+
+            await emailjs.send(
+              CFG.EMAILJS_SERVICE_ID,
+              CFG.EMAILJS_NEWSLETTER_TEMPLATE_ID,
+              params
+            );
+
+            // Replace form with a success confirmation (same styling as order success)
+            const success = document.createElement('div');
+            success.className = 'success-panel';
+            success.innerHTML = `
+              <div class="check">✓</div>
+              <h3>You’re on the list!</h3>
+              <p>Thanks${name ? `, <strong>${escapeHtml(name)}</strong>` : ''}. We added
+                 <strong>${escapeHtml(email)}</strong> to our newsletter.</p>
+              <p class="muted tiny">You can unsubscribe anytime via a link in any email.</p>
+            `;
+            nForm.replaceWith(success);
+
+            // (optional) also log to the same Google Sheet if you configured CFG.GSHEETS_WEBAPP_URL
+            if (CFG.GSHEETS_WEBAPP_URL) {
+              fetch(CFG.GSHEETS_WEBAPP_URL, {
+                method:'POST', headers:{'Content-Type':'application/json'},
+                body: JSON.stringify({
+                  type: 'newsletter',
+                  name, email,
+                  submitted_at: new Date().toISOString(),
+                  page: location.href,
+                  ua: navigator.userAgent
+                })
+              }).catch(()=>{});
+            }
           } catch (err) {
-            console.error(err);
-            nlSetStatus('Could not join right now. Please try again.', 'error');
-            updateNL();
+            console.error('Newsletter send failed:', err);
+            // Gentle inline fallback message
+            const fail = document.createElement('p');
+            fail.className = 'status error';
+            fail.textContent = 'Could not join right now. Please try again.';
+            // Append once
+            if (!nForm.querySelector('.status.error')) nForm.appendChild(fail);
+            updateBtn();
           }
         });
-      }
+      })();
+
 
   });
 })();
