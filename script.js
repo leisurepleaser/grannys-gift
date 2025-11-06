@@ -1,21 +1,22 @@
-// script.js — quantity forced to 1–20, live total, yellow+red-border UX, spam guard,
-// internal email + auto-reply, optional Sheets logging, and a post-submit summary.
+// script.js — keeps order flow + live total + summary; adds newsletter signup;
+// forces quantity 1–20; spam guards; EmailJS internal + auto-reply + newsletter.
 (function () {
   document.addEventListener('DOMContentLoaded', () => {
-    // ====== EDIT THESE IF YOUR EMAILJS IDs ARE DIFFERENT ======
+    // ====== CONFIG ======
     const CFG = {
       EMAILJS_PUBLIC_KEY: "fTkyrOb1GWzQ36JvY",
       EMAILJS_SERVICE_ID: "service_5axgx93",
-      EMAILJS_INTERNAL_TEMPLATE_ID: "template_fxankcs",    // goes to your two inboxes (set in Template "To")
-      EMAILJS_AUTOREPLY_TEMPLATE_ID: "template_autoreply", // To must be {{to_email}}
-      GSHEETS_WEBAPP_URL: ""                                // optional: paste your Apps Script Web App URL
+      EMAILJS_INTERNAL_TEMPLATE_ID: "template_fxankcs",     // internal order notification
+      EMAILJS_AUTOREPLY_TEMPLATE_ID: "template_autoreply",  // customer auto-reply (To={{to_email}})
+      EMAILJS_NEWSLETTER_TEMPLATE_ID: "template_newsletter",// NEW: newsletter signups
+      GSHEETS_WEBAPP_URL: ""                                // optional logging
     };
-    // =========================================================
+    // =====================
 
     const form      = document.getElementById('orderForm');
     if (!form) return;
 
-    // Inputs
+    // Inputs (order)
     const nameEl    = document.getElementById('name');
     const phoneEl   = document.getElementById('phone');
     const emailEl   = document.getElementById('email');
@@ -27,7 +28,7 @@
     const submitBtn = document.getElementById('submitBtn');
     const statusEl  = document.getElementById('status');
 
-    // Success panel + summary (create if missing so feature works regardless of HTML)
+    // Success panel + summary (ensure exists)
     let successPanel = document.getElementById('successPanel');
     let summaryEl    = document.getElementById('summary');
     if (!successPanel) {
@@ -49,7 +50,7 @@
       successPanel.appendChild(summaryEl);
     }
 
-    // ---- Ensure the "Estimated total" UI exists just above the Submit button ----
+    // Live total box (ensure exists)
     let totalEl = document.getElementById('orderTotal');
     if (!totalEl) {
       const row = document.createElement('div');
@@ -58,24 +59,12 @@
       totalEl.id = 'orderTotal';
       totalEl.className = 'total-box';
       totalEl.textContent = 'Estimated total: —';
-      // Inline fallback styles (in case CSS wasn’t added)
-      totalEl.style.background = totalEl.style.background || '#fff8e1';
-      totalEl.style.border = totalEl.style.border || '1px solid #ffe082';
-      totalEl.style.borderRadius = totalEl.style.borderRadius || '10px';
-      totalEl.style.padding = totalEl.style.padding || '8px 12px';
-      totalEl.style.fontWeight = totalEl.style.fontWeight || '700';
-      row.style.display = row.style.display || 'flex';
-      row.style.justifyContent = row.style.justifyContent || 'flex-end';
-      row.style.margin = row.style.margin || '10px 0 8px';
       row.appendChild(totalEl);
-      if (submitBtn && submitBtn.parentNode) submitBtn.parentNode.insertBefore(row, submitBtn);
-      else form.appendChild(row);
+      form.insertBefore(row, submitBtn);
     }
 
-    // Currency formatter
     const fmtUSD = new Intl.NumberFormat('en-US', { style: 'currency', currency: 'USD' });
 
-    // Status helper
     function setStatus(msg, kind) {
       if (!statusEl) return;
       statusEl.textContent = msg || '';
@@ -83,14 +72,14 @@
       statusEl.classList.toggle('error', kind === 'error');
     }
 
-    // Live char counter
+    // Char counter
     if (msgEl && countEl) {
       const updateCount = () => (countEl.textContent = `${msgEl.value.length}/300`);
       msgEl.addEventListener('input', updateCount);
       updateCount();
     }
 
-    // Enable/disable submit (message optional)
+    // Ready state
     const requiredEls = [nameEl, phoneEl, emailEl, sizeEl, qtyEl];
     function allRequiredFilled() {
       const hasVal = el => !!(el && (el.value || '').trim());
@@ -100,22 +89,19 @@
     function updateSubmitState() {
       const ready = allRequiredFilled();
       submitBtn.disabled = !ready;
-      submitBtn.classList.toggle('ready', ready); // yellow + red border when ready
+      submitBtn.classList.toggle('ready', ready);
     }
 
-    // ---- Price helpers ----
+    // Price helpers
     function getPriceForSize() {
-      // 1) Prefer data-price on the selected <option>
       const opt = sizeEl.options[sizeEl.selectedIndex];
       let price = parseFloat(opt?.dataset?.price);
       if (Number.isFinite(price)) return price;
-      // 2) Fallback by label text (in case HTML options lack data-price)
       const label = (opt?.textContent || '').toLowerCase();
       if (label.includes('whole'))   return 34.99;
       if (label.includes('cupcake')) return 5.99;
       return 0;
     }
-
     function updateTotalUI() {
       if (!totalEl) return;
       const sizePicked = !!(sizeEl && sizeEl.value);
@@ -124,15 +110,14 @@
         const qty = Number((qtyEl.value || '').trim());
         const priceEach = getPriceForSize();
         if (priceEach > 0 && qty > 0) {
-          const total = priceEach * qty;
-          totalEl.textContent = `Estimated total: ${fmtUSD.format(total)}`;
+          totalEl.textContent = `Estimated total: ${fmtUSD.format(priceEach * qty)}`;
           return;
         }
       }
       totalEl.textContent = 'Estimated total: —';
     }
 
-    // ---- FORCE Quantity dropdown to 1–20 (overrides any old HTML) ----
+    // FORCE Quantity to 1–20
     (function enforceQuantityMax(max = 20) {
       const el = document.getElementById('quantity') || document.querySelector('select[name="quantity"]');
       if (!el) return;
@@ -143,40 +128,33 @@
       if (Number.isInteger(prev) && prev >= 1 && prev <= max) el.value = String(prev);
     })();
 
-    // Watch inputs and selects; update both button state and total
-    requiredEls.forEach(el => {
+    // Input watchers
+    [nameEl, phoneEl, emailEl, sizeEl, qtyEl].forEach(el => {
       el.addEventListener('input', () => { updateSubmitState(); updateTotalUI(); });
       el.addEventListener('change', () => { updateSubmitState(); updateTotalUI(); });
     });
-    // initialize once on load
-    updateSubmitState();
-    updateTotalUI();
+    updateSubmitState(); updateTotalUI();
 
-    // Spam guards: honeypot + min time + simple rate limit
+    // Spam guards
     const pageLoadedAt = Date.now();
     function isSpammy() {
-      if (hpEl && hpEl.value.trim() !== "") return true;           // honeypot filled
-      if (Date.now() - pageLoadedAt < 2500) return true;           // submitted too fast (<2.5s)
+      if (document.getElementById('website')?.value.trim()) return true;
+      if (Date.now() - pageLoadedAt < 2500) return true;
       const last = Number(localStorage.getItem('gg_last_submit_ts') || 0);
-      if (Date.now() - last < 45_000) return true;                 // throttle: 45s between submits
+      if (Date.now() - last < 45_000) return true;
       return false;
     }
     function markSubmittedNow() {
       localStorage.setItem('gg_last_submit_ts', String(Date.now()));
     }
 
-    // EmailJS init
-    if (!window.emailjs) {
-      setStatus("Email system isn't loaded. Please refresh.", 'error');
-      return;
-    }
+    // EmailJS
+    if (!window.emailjs) { setStatus("Email system isn't loaded. Please refresh.", 'error'); return; }
     emailjs.init({ publicKey: CFG.EMAILJS_PUBLIC_KEY });
 
-    // Submit handler
+    // ORDER submit
     form.addEventListener('submit', async (e) => {
       e.preventDefault();
-
-      // Validation
       if (!allRequiredFilled()) { setStatus('Please fill in all required fields.', 'error'); return; }
       if ((msgEl.value || '').length > 300) { setStatus('Message must be 300 characters or fewer.', 'error'); return; }
       if (isSpammy()) { setStatus('Something went wrong. Please try again in a moment.', 'error'); return; }
@@ -190,7 +168,6 @@
       const priceEach = getPriceForSize();
       const total     = priceEach * Number(quantity || 0);
 
-      // Params for internal notification (recipients STATIC in EmailJS Template “To”)
       const internalParams = {
         name, phone, email: fromEmail, size, quantity,
         price_each: fmtUSD.format(priceEach),
@@ -200,13 +177,9 @@
         reply_to: fromEmail,
         from_name: name
       };
-
-      // Params for auto-reply (Template “To” must be {{to_email}})
       const autoReplyParams = {
         to_email: fromEmail,
-        name,
-        size,
-        quantity,
+        name, size, quantity,
         price_each: fmtUSD.format(priceEach),
         total: isFinite(total) ? fmtUSD.format(total) : '—',
         submitted_at: new Date().toLocaleString()
@@ -217,34 +190,28 @@
         submitBtn.classList.remove('ready');
         setStatus('Sending…');
 
-        // 1) Send to your team
         await emailjs.send(CFG.EMAILJS_SERVICE_ID, CFG.EMAILJS_INTERNAL_TEMPLATE_ID, internalParams);
 
-        // 2) Auto-reply to customer (non-blocking)
         if (CFG.EMAILJS_AUTOREPLY_TEMPLATE_ID) {
-          emailjs
-            .send(CFG.EMAILJS_SERVICE_ID, CFG.EMAILJS_AUTOREPLY_TEMPLATE_ID, autoReplyParams)
-            .catch(() => {}); // do not block success UI if auto-reply fails
+          emailjs.send(CFG.EMAILJS_SERVICE_ID, CFG.EMAILJS_AUTOREPLY_TEMPLATE_ID, autoReplyParams)
+                 .catch(()=>{});
         }
-
-        // 3) Log to Google Sheets (optional)
         if (CFG.GSHEETS_WEBAPP_URL) {
           fetch(CFG.GSHEETS_WEBAPP_URL, {
             method: 'POST',
-            headers: { 'Content-Type': 'application/json' },
+            headers: {'Content-Type':'application/json'},
             body: JSON.stringify({
               name, email: fromEmail, phone, size,
               price_each: priceEach, quantity: Number(quantity || 0), total,
               message, submitted_at: new Date().toISOString()
             })
-          }).catch(() => {});
+          }).catch(()=>{});
         }
 
-        // --- Success UI: render summary & show panel ---
         renderSummary({ name, email: fromEmail, phone, size, quantity, priceEach, total, message });
         form.hidden = true;
         successPanel.hidden = false;
-        setStatus('', ''); // clear inline status (panel is the success now)
+        setStatus('', '');
         markSubmittedNow();
         window.scrollTo({ top: 0, behavior: 'smooth' });
       } catch (err) {
@@ -261,13 +228,57 @@
           <dt>Name</dt><dd>${escapeHtml(name)}</dd>
           <dt>Email</dt><dd>${escapeHtml(email)}</dd>
           <dt>Phone</dt><dd>${escapeHtml(phone)}</dd>
-          <dt>Size</dt><dd>${escapeHtml(size)} ${priceEach ? `(${fmtUSD.format(priceEach)})` : ''}</dd>
+          <dt>Size</dt><dd>${escapeHtml(size)} (${fmtUSD.format(priceEach)})</dd>
           <dt>Quantity</dt><dd>${escapeHtml(quantity)}</dd>
           <dt>Total</dt><dd>${isFinite(total) ? fmtUSD.format(total) : '—'}</dd>
           <dt>Message</dt><dd>${escapeHtml(message || '(no message)')}</dd>
         </dl>`;
     }
     function escapeHtml(s=''){ return s.replace(/[&<>"']/g, c => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;', "'":'&#39;'}[c])); }
+
+    // ============== NEWSLETTER SIGN-UP ==============
+    const nForm    = document.getElementById('newsletterForm');
+    const nlName   = document.getElementById('nl_name');
+    const nlEmail  = document.getElementById('nl_email');
+    const nlHP     = document.getElementById('nl_website');
+    const nlBtn    = document.getElementById('nl_submit');
+    const nlStatus = document.getElementById('nl_status');
+
+    function nlReady() { return !!nlEmail?.value && nlEmail.checkValidity(); }
+    function nlSetStatus(msg, kind) {
+      nlStatus.textContent = msg || '';
+      nlStatus.classList.toggle('ok', kind === 'ok');
+      nlStatus.classList.toggle('error', kind === 'error');
+    }
+
+    if (nForm) {
+      const updateNL = () => { nlBtn.disabled = !nlReady(); nlBtn.classList.toggle('ready', nlReady()); };
+      nlEmail?.addEventListener('input', updateNL); updateNL();
+
+      nForm.addEventListener('submit', async (e) => {
+        e.preventDefault();
+        if (nlHP?.value.trim()) return; // honeypot
+        if (!nlReady()) { nlSetStatus('Enter a valid email.', 'error'); return; }
+
+        const params = {
+          name: (nlName?.value || '').trim(),
+          email: nlEmail.value.trim(),
+          reply_to: nlEmail.value.trim(),
+          submitted_at: new Date().toLocaleString()
+        };
+
+        try {
+          nlBtn.disabled = true; nlBtn.classList.remove('ready'); nlSetStatus('Joining…');
+          await emailjs.send(CFG.EMAILJS_SERVICE_ID, CFG.EMAILJS_NEWSLETTER_TEMPLATE_ID, params);
+          nlSetStatus('You’re on the list! Check your email for a welcome note.', 'ok');
+          nForm.reset(); updateNL();
+        } catch (err) {
+          console.error(err);
+          nlSetStatus('Could not join right now. Please try again.', 'error');
+          updateNL();
+        }
+      });
+    }
   });
 })();
 

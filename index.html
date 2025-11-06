@@ -5,40 +5,58 @@
   <meta name="viewport" content="width=device-width, initial-scale=1" />
   <title>Granny’s Gift</title>
 
-  <!-- Inline favicon to silence 404 -->
+  <!-- Inline favicon (emoji) -->
   <link rel="icon"
         href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 64 64'%3E%3Ctext y='50%25' x='50%25' dominant-baseline='middle' text-anchor='middle' font-size='48'%3E%F0%9F%8D%B0%3C/text%3E%3C/svg%3E">
 
   <link rel="stylesheet" href="styles.css" />
 </head>
 <body>
+
+  <!-- Wallpaper rails (desktop) -->
+  <div class="rails" aria-hidden="true">
+    <aside class="rail left">
+      <img src="images/IMG_2409.JPG" alt="" loading="lazy">
+      <img src="images/DSC_9628.JPG" alt="" loading="lazy">
+      <img src="images/IMG_1669.jpg" alt="" loading="lazy">
+      <img src="images/DSC_9629.JPG" alt="" loading="lazy">
+    </aside>
+    <aside class="rail right">
+      <img src="images/DSC_9629.JPG" alt="" loading="lazy">
+      <img src="images/IMG_1669.jpg" alt="" loading="lazy">
+      <img src="images/DSC_9628.JPG" alt="" loading="lazy">
+      <img src="images/IMG_2409.JPG" alt="" loading="lazy">
+    </aside>
+  </div>
+
+  <header class="brand-hero">
+    <img src="images/grannysgift_banner.png" alt="Granny’s Gift banner" loading="eager" decoding="async">
+  </header>
+
   <main class="wrap">
     <section class="card" role="region" aria-labelledby="title">
       <h1 id="title">Granny’s Gift</h1>
 
-      <!-- Success panel (hidden until submit succeeds) -->
+      <!-- Mobile gallery (phones only) -->
+      <div class="mobile-gallery">
+        <img src="images/IMG_2409.JPG" alt="Individually wrapped mini 7UP cakes">
+        <img src="images/IMG_1669.jpg" alt="Jumbo cupcakes cooling on a rack">
+        <img src="images/DSC_9628.JPG" alt="Whole 7UP pound cake">
+        <img src="images/DSC_9629.JPG" alt="Whole 7UP pound cake (alternate)">
+      </div>
+
+      <!-- Success panel (after submit) -->
       <div id="successPanel" class="success-panel" hidden>
         <div class="check">✓</div>
         <h2>Thank you!</h2>
-        <p>
-          We’ve received your inquiry and sent you a confirmation email.
-          A member of our team will reply within <strong>1–3 business days</strong>.
+        <p>We’ve received your inquiry and sent you a confirmation email.
+           A member of our team will reply within <strong>1–3 business days</strong>.
         </p>
         <div id="summary" class="summary"></div>
         <p class="muted">Need to add details? Just reply to the confirmation email.</p>
       </div>
 
-      <!-- Success panel (hidden until submit succeeds) -->
-      <div id="successPanel" hidden>
-        <h2>Thank you!</h2>
-        <p>
-          We’ve received your inquiry and sent you a confirmation email.
-          We’ll reply within <strong>1–3 business days</strong>.
-        </p>
-        <div id="summary"></div>
-        <p class="muted">Need to add details? Just reply to the confirmation email.</p>
-      </div>
-
+      <!-- Order form -->
       <form id="orderForm" novalidate>
         <div class="row">
           <label for="name">Name <span class="req" aria-hidden="true">*</span></label>
@@ -62,13 +80,13 @@
             <option value="Whole Cake (1)" data-price="34.99">Whole Cake (1) — $34.99</option>
             <option value="Cupcake (Jumbo)(2)" data-price="5.99">Cupcake (Jumbo) (2) — $5.99</option>
           </select>
-
         </div>
 
         <div class="row">
           <label for="quantity">Quantity <span class="req" aria-hidden="true">*</span></label>
           <select id="quantity" name="quantity" required>
             <option value="" selected disabled>Choose qty…</option>
+            <!-- JS will enforce 1–20 even if this file cached -->
             <option value="1">1</option><option value="2">2</option><option value="3">3</option>
             <option value="4">4</option><option value="5">5</option><option value="6">6</option>
             <option value="7">7</option><option value="8">8</option><option value="9">9</option>
@@ -77,7 +95,6 @@
             <option value="16">16</option><option value="17">17</option><option value="18">18</option>
             <option value="19">19</option><option value="20">20</option>
           </select>
-
         </div>
 
         <div class="row">
@@ -86,23 +103,70 @@
           <small id="charCount" class="muted">0/300</small>
         </div>
 
-        <!-- Honeypot (hidden from users; bots will often fill it) -->
-        <input id="website" name="website" autocomplete="off" tabindex="-1" class="hp" aria-hidden="true" />
-
-        <!-- Live total (updates as you choose Size/Quantity) -->
+        <!-- Live total -->
         <div class="total-row">
-          <div id="orderTotal" class="total-box" aria-live="polite" aria-atomic="true">
-            Estimated total: —
-          </div>
+          <div id="orderTotal" class="total-box" aria-live="polite" aria-atomic="true">Estimated total: —</div>
         </div>
+
+        <!-- Honeypot (hidden) -->
+        <input id="website" name="website" autocomplete="off" tabindex="-1" class="hp" aria-hidden="true" />
 
         <button id="submitBtn" type="submit" class="btn" disabled>Submit</button>
         <div id="status" role="status" aria-live="polite" class="status"></div>
       </form>
+
+      <hr class="divider" />
+
+      <!-- Ingredients (banner-inspired theme) -->
+      <section id="ingredients" class="info ingredients-card" aria-labelledby="ing-title">
+        <h2 id="ing-title">Ingredients & Allergens</h2>
+        <ul class="ingredients-list" role="list">
+          <li>sugar</li>
+          <li>flour</li>
+          <li><strong>eggs</strong></li>
+          <li>7UP</li>
+          <li>butter</li>
+          <li>vegetable oil</li>
+          <li>lemon</li>
+          <li><strong>coconut</strong></li>
+        </ul>
+        <p class="muted">Allergens are bolded. Made in a Washington State home kitchen.</p>
+      </section>
+
+      <!-- Contact (fruit border) -->
+      <section id="contact" class="info contact-card" aria-labelledby="contact-title">
+        <h2 id="contact-title">Contact us</h2>
+        <ul class="contact-list">
+          <li><strong>Email:</strong> <a href="mailto:grannysgiftinc@gmail.com">grannysgiftinc@gmail.com</a></li>
+          <li><strong>Pickup Area:</strong> Sea-Tac / South Seattle</li>
+        </ul>
+      </section>
+
+      <!-- Newsletter sign-up -->
+      <section id="newsletter" class="info newsletter-card" aria-labelledby="news-title">
+        <h2 id="news-title">Get news & sales</h2>
+        <form id="newsletterForm" novalidate>
+          <div class="row">
+            <label for="nl_name">Name (optional)</label>
+            <input id="nl_name" name="nl_name" type="text" autocomplete="name" />
+          </div>
+          <div class="row">
+            <label for="nl_email">Email <span class="req" aria-hidden="true">*</span></label>
+            <input id="nl_email" name="nl_email" type="email" autocomplete="email" required />
+          </div>
+
+          <!-- Honeypot -->
+          <input id="nl_website" name="nl_website" autocomplete="off" tabindex="-1" class="hp" aria-hidden="true" />
+
+          <button id="nl_submit" type="submit" class="btn small" disabled>Join the list</button>
+          <div id="nl_status" role="status" aria-live="polite" class="status"></div>
+        </form>
+        <p class="muted tiny">We respect your inbox. Unsubscribe anytime.</p>
+      </section>
     </section>
   </main>
 
-  <!-- EmailJS browser SDK -->
+  <!-- EmailJS SDK + JS -->
   <script src="https://cdn.jsdelivr.net/npm/@emailjs/browser@4/dist/email.min.js"></script>
   <script defer src="script.js"></script>
 </body>
