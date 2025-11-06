@@ -11,7 +11,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
     // Order emails (already working for you)
     EMAILJS_INTERNAL_TEMPLATE_ID: "template_fxankcs",     // internal order notification
-    EMAILJS_AUTOREPLY_TEMPLATE_ID: "template_autoreply",  // customer confirmation (optional)
+    EMAILJS_AUTOREPLY_TEMPLATE_ID: "template_aew1yes",  // customer confirmation (optional)
 
     // Newsletter email (new)
     EMAILJS_NEWSLETTER_TEMPLATE_ID: "template_p7tmtwl",// internal notify to grannysgiftinc@gmail.com
