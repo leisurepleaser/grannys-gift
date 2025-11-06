@@ -213,44 +213,51 @@
     }
     function escapeHtml(s=''){ return s.replace(/[&<>"']/g, c => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;', "'":'&#39;'}[c])); }
 
-    // ===== NEWSLETTER (email only) =====
-    const nForm    = document.getElementById('newsletterForm');
-    const nlEmail  = document.getElementById('nl_email');
-    const nlHP     = document.getElementById('nl_website');
-    const nlBtn    = document.getElementById('nl_submit');
-    const nlStatus = document.getElementById('nl_status');
+      // ===== NEWSLETTER (optional name + required email; no visible status field needed) =====
+      const nForm    = document.getElementById('newsletterForm');
+      const nlName   = document.getElementById('nl_name');
+      const nlEmail  = document.getElementById('nl_email');
+      const nlHP     = document.getElementById('nl_website');
+      const nlBtn    = document.getElementById('nl_submit');     // may be disabled until valid
+      const nlStatus = document.getElementById('nl_status');      // may not exist; guard below
 
-    function nlReady(){ return !!nlEmail?.value && nlEmail.checkValidity(); }
-    function nlSetStatus(msg, kind){
-      nlStatus.textContent = msg || '';
-      nlStatus.classList.toggle('ok', kind === 'ok');
-      nlStatus.classList.toggle('error', kind === 'error');
-    }
+      function nlReady(){ return !!nlEmail?.value && nlEmail.checkValidity(); }
+      function nlSetStatus(msg, kind){
+        if (!nlStatus) return;               // if no status node, silently skip UI messages
+        nlStatus.textContent = msg || '';
+        nlStatus.classList.toggle('ok', kind === 'ok');
+        nlStatus.classList.toggle('error', kind === 'error');
+      }
 
-    if (nForm) {
-      const updateNL = () => { nlBtn.disabled = !nlReady(); nlBtn.classList.toggle('ready', nlReady()); };
-      nlEmail?.addEventListener('input', updateNL); updateNL();
+      if (nForm) {
+        const updateNL = () => { nlBtn.disabled = !nlReady(); nlBtn.classList.toggle('ready', nlReady()); };
+        nlEmail?.addEventListener('input', updateNL); updateNL();
 
-      nForm.addEventListener('submit', async (e) => {
-        e.preventDefault();
-        if (nlHP?.value.trim()) return; // honeypot
-        if (!nlReady()) { nlSetStatus('Enter a valid email.', 'error'); return; }
+        nForm.addEventListener('submit', async (e) => {
+          e.preventDefault();
+          if (nlHP?.value.trim()) return; // honeypot
+          if (!nlReady()) { nlSetStatus('Enter a valid email.', 'error'); return; }
 
-        const email = nlEmail.value.trim();
-        const params = { email, reply_to: email, submitted_at: new Date().toLocaleString() };
+          const params = {
+            name: (nlName?.value || '').trim(),
+            email: nlEmail.value.trim(),
+            reply_to: nlEmail.value.trim(),
+            submitted_at: new Date().toLocaleString()
+          };
 
-        try {
-          nlBtn.disabled = true; nlBtn.classList.remove('ready'); nlSetStatus('Joining…');
-          await emailjs.send(CFG.EMAILJS_SERVICE_ID, CFG.EMAILJS_NEWSLETTER_TEMPLATE_ID, params);
-          nlSetStatus('You’re on the list! Check your email for a welcome note.', 'ok');
-          nForm.reset(); updateNL();
-        } catch (err) {
-          console.error(err);
-          nlSetStatus('Could not join right now. Please try again.', 'error');
-          updateNL();
-        }
-      });
-    }
+          try {
+            nlBtn.disabled = true; nlBtn.classList.remove('ready'); nlSetStatus('Joining…');
+            await emailjs.send(CFG.EMAILJS_SERVICE_ID, CFG.EMAILJS_NEWSLETTER_TEMPLATE_ID, params);
+            nlSetStatus('You’re on the list! Check your email for a welcome note.', 'ok');
+            nForm.reset(); updateNL();
+          } catch (err) {
+            console.error(err);
+            nlSetStatus('Could not join right now. Please try again.', 'error');
+            updateNL();
+          }
+        });
+      }
+
   });
 })();
 

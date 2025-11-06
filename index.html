@@ -12,17 +12,17 @@
 </head>
 <body>
 
-  <!-- EDGE PHOTOS ONLY (fixed rails; hidden on small screens) -->
-  <div class="rails" aria-hidden="true">
-    <div class="rail left">
-      <img src="images/DSC_9628.JPG" alt="">
-      <img src="images/IMG_1669.jpg" alt="">
+    <!-- EDGE PHOTOS (fixed on the outer sides, desktop & most laptops) -->
+    <div class="rails" aria-hidden="true">
+      <div class="rail left">
+        <img src="images/DSC_9628.JPG" alt="">
+        <img src="images/IMG_1669.jpg" alt="">
+      </div>
+      <div class="rail right">
+        <img src="images/IMG_1669.jpg" alt="">
+        <img src="images/DSC_9629.JPG" alt="">
+      </div>
     </div>
-    <div class="rail right">
-      <img src="images/IMG_1669.jpg" alt="">
-      <img src="images/DSC_9629.JPG" alt="">
-    </div>
-  </div>
 
   <!-- Banner fits within center width, no crop -->
   <header class="brand-hero">
@@ -120,21 +120,25 @@
         </ul>
       </section>
 
-      <!-- NEWSLETTER: email only -->
+
+      <!-- Newsletter (NAME is optional; EMAIL required; no extra field near the button) -->
       <section id="newsletter" class="info newsletter-card">
-        <h2>Get news & sales</h2>
+        <h2>Get news &amp; sales</h2>
         <form id="newsletterForm" novalidate>
           <div class="row">
-            <label for="nl_email">Email <span class="req">*</span></label>
+            <label for="nl_name">Name (optional)</label>
+            <input id="nl_name" name="nl_name" type="text" autocomplete="name" />
+          </div>
+          <div class="row">
+            <label for="nl_email">Email <span class="req" aria-hidden="true">*</span></label>
             <input id="nl_email" name="nl_email" type="email" autocomplete="email" required />
           </div>
+          <!-- Honeypot (hidden) -->
           <input id="nl_website" name="nl_website" autocomplete="off" tabindex="-1" class="hp" aria-hidden="true" />
           <button id="nl_submit" type="submit" class="btn small" disabled>Join the list</button>
-          <div id="nl_status" role="status" aria-live="polite" class="status"></div>
         </form>
         <p class="muted tiny">We respect your inbox. Unsubscribe anytime.</p>
       </section>
-    </section>
   </main>
 
   <script src="https://cdn.jsdelivr.net/npm/@emailjs/browser@4/dist/email.min.js"></script>
