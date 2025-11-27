@@ -6,74 +6,119 @@
   <title>Granny’s Gift</title>
 
   <!-- favicon -->
-  <link rel="icon"
-        href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 64 64'%3E%3Ctext y='50%25' x='50%25' dominant-baseline='middle' text-anchor='middle' font-size='48'%3E%F0%9F%8D%B0%3C/text%3E%3C/svg%3E">
+  <link
+    rel="icon"
+    href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 64 64'%3E%3Ctext y='50%25' x='50%25' dominant-baseline='middle' text-anchor='middle' font-size='48'%3E%F0%9F%8D%B0%3C/text%3E%3C/svg%3E"
+  >
 
   <link rel="stylesheet" href="styles.css" />
 </head>
 <body>
 
-  <!-- Brand banner (fits, no crop) -->
+  <!-- Brand banner -->
   <header class="brand-hero">
-    <img src="images/grannysgift_banner.png" alt="Granny’s Gift banner" loading="eager" decoding="async">
-    <!-- Sold-out badge -->
+    <img
+      src="images/grannysgift_banner.png"
+      alt="Granny’s Gift banner"
+      loading="eager"
+      decoding="async"
+    >
+    <!-- Sold Out badge -->
     <div class="promo-sticker"><strong>Sold Out</strong></div>
   </header>
 
   <main class="wrap">
-    <!-- Two-column hero: left = order form; right = whole-cake image -->
     <section class="hero-grid">
-      <!-- LEFT: Order interface -->
+      <!-- LEFT: Order card -->
       <section class="card" role="region" aria-labelledby="title">
         <h1 id="title">Order Granny’s Gift</h1>
 
-        <!-- Success panel (script toggles) -->
+        <!-- Success panel (shown by JS) -->
         <div id="successPanel" class="success-panel" hidden>
           <div class="check">✓</div>
           <h2>Thank you!</h2>
-          <p>We’ve received your inquiry and sent you a confirmation email.
-             A member of our team will reply within <strong>1–3 business days</strong>.
+          <p>
+            We’ve received your inquiry and sent you a confirmation email.
+            A member of our team will reply within
+            <strong>1–3 business days</strong>.
           </p>
           <div id="summary" class="summary"></div>
-          <p class="muted">Need to add details? Just reply to the confirmation email.</p>
+          <p class="muted">
+            Need to add details? Just reply to the confirmation email.
+          </p>
         </div>
 
-        <!-- Order form (IDs match script.js) -->
+        <!-- Inquiry form (structure/IDs match script.js) -->
         <form id="orderForm" novalidate>
           <div class="row">
-            <label for="name">Name <span class="req">*</span></label>
-            <input id="name" name="name" type="text" autocomplete="name" required />
+            <label for="name">
+              Name <span class="req">*</span>
+            </label>
+            <input
+              id="name"
+              name="name"
+              type="text"
+              autocomplete="name"
+              required
+            />
           </div>
 
           <div class="row">
-            <label for="phone">Phone Number <span class="req">*</span></label>
-            <input id="phone" name="phone" type="text" inputmode="tel" required />
+            <label for="phone">
+              Phone Number <span class="req">*</span>
+            </label>
+            <input
+              id="phone"
+              name="phone"
+              type="text"
+              inputmode="tel"
+              required
+            />
           </div>
 
           <div class="row">
-            <label for="email">Email <span class="req">*</span></label>
-            <input id="email" name="email" type="email" autocomplete="email" required />
+            <label for="email">
+              Email <span class="req">*</span>
+            </label>
+            <input
+              id="email"
+              name="email"
+              type="email"
+              autocomplete="email"
+              required
+            />
           </div>
 
           <div class="row two">
             <div>
-              <label for="size">Size <span class="req">*</span></label>
+              <label for="size">
+                Size <span class="req">*</span>
+              </label>
               <select id="size" name="size" required>
                 <option value="" selected disabled>Choose one…</option>
-                <option value="Whole Cake (1)" data-price="34.99">Whole Cake (1) — $34.99</option>
-                <option value="Cupcake (Jumbo)(2)" data-price="5.99">Cupcake (Jumbo) (2) — $5.99</option>
+                <option value="Whole Cake (1)" data-price="34.99">
+                  Whole Cake (1) — $34.99
+                </option>
+                <option value="Cupcake (Jumbo)(2)" data-price="5.99">
+                  Cupcake (Jumbo)(2) — $5.99
+                </option>
               </select>
             </div>
             <div>
-              <label for="quantity">Quantity <span class="req">*</span></label>
+              <label for="quantity">
+                Quantity <span class="req">*</span>
+              </label>
               <select id="quantity" name="quantity" required>
                 <option value="" selected disabled>Choose qty…</option>
-                <option value="1">1</option><option value="2">2</option><option value="3">3</option>
-                <option value="4">4</option><option value="5">5</option><option value="6">6</option>
-                <option value="7">7</option><option value="8">8</option><option value="9">9</option>
-                <option value="10">10</option><option value="11">11</option><option value="12">12</option>
-                <option value="13">13</option><option value="14">14</option><option value="15">15</option>
-                <option value="16">16</option><option value="17">17</option><option value="18">18</option>
+                <option value="1">1</option><option value="2">2</option>
+                <option value="3">3</option><option value="4">4</option>
+                <option value="5">5</option><option value="6">6</option>
+                <option value="7">7</option><option value="8">8</option>
+                <option value="9">9</option><option value="10">10</option>
+                <option value="11">11</option><option value="12">12</option>
+                <option value="13">13</option><option value="14">14</option>
+                <option value="15">15</option><option value="16">16</option>
+                <option value="17">17</option><option value="18">18</option>
                 <option value="19">19</option><option value="20">20</option>
               </select>
             </div>
@@ -81,26 +126,51 @@
 
           <div class="row">
             <label for="message">Message (Optional)</label>
-            <textarea id="message" name="message" maxlength="300" rows="3" placeholder="Up to 300 characters"></textarea>
+            <textarea
+              id="message"
+              name="message"
+              maxlength="300"
+              rows="3"
+              placeholder="Up to 300 characters"
+            ></textarea>
             <small id="charCount" class="muted">0/300</small>
           </div>
 
           <div class="total-row">
-            <div id="orderTotal" class="total-box" aria-live="polite" aria-atomic="true">
+            <div
+              id="orderTotal"
+              class="total-box"
+              aria-live="polite"
+              aria-atomic="true"
+            >
               Estimated total: —
             </div>
           </div>
 
           <!-- Honeypot -->
-          <input id="website" name="website" autocomplete="off" tabindex="-1" class="hp" aria-hidden="true" />
+          <input
+            id="website"
+            name="website"
+            autocomplete="off"
+            tabindex="-1"
+            class="hp"
+            aria-hidden="true"
+          />
 
-          <button id="submitBtn" type="submit" class="btn" disabled>Submit</button>
-          <div id="status" role="status" aria-live="polite" class="status"></div>
+          <button id="submitBtn" type="submit" class="btn" disabled>
+            Submit
+          </button>
+          <div
+            id="status"
+            role="status"
+            aria-live="polite"
+            class="status"
+          ></div>
         </form>
 
         <hr class="divider" />
 
-        <!-- Our Story (heritage / nostalgia) -->
+        <!-- Our Story -->
         <section id="about" class="info about-story">
           <h2>Our Story</h2>
           <p class="about-tagline">
@@ -108,14 +178,17 @@
           </p>
           <p>
             Granny’s Gift is a lemon-lime 7UP pound cake made from a
-            <strong>50+ year secret family recipe</strong> created by Dolores “Granny” Jett.
-            She taught her granddaughter — my mother — who then taught me. Today, only the two of us
-            know the full recipe and method.
+            <strong>50+ year secret family recipe</strong> created by Dolores
+            “Granny” Jett. She taught her granddaughter — my mother — who then
+            taught me. Today, only the two of us know the complete recipe and
+            method.
           </p>
           <p>
-            Each cake is mixed and baked by hand in our Washington home kitchen, preserving the same
-            care, patience, and tradition that once anchored Granny’s holiday tables. When you serve
-            Granny’s Gift, you’re sharing a slice of family history, nostalgia, and home.
+            Each cake is mixed and baked by hand in our Washington home
+            kitchen, preserving the same care, patience, and tradition that
+            once anchored Granny’s holiday tables. When you serve Granny’s
+            Gift, you are sharing a slice of family history, nostalgia, and
+            home.
           </p>
         </section>
 
@@ -126,74 +199,117 @@
             <li>sugar</li><li>flour</li><li><strong>eggs</strong></li><li>7UP</li>
             <li>butter</li><li>vegetable oil</li><li>lemon</li><li><strong>coconut</strong></li>
           </ul>
-          <p class="muted">Allergens are bolded. Prepared in a Washington State home kitchen.</p>
+          <p class="muted">
+            Allergens are bolded. Prepared in a Washington State home kitchen.
+          </p>
         </section>
 
         <!-- Contact -->
         <section id="contact" class="info contact-card">
           <h2>Contact us</h2>
           <ul class="contact-list">
-            <li><strong>Email:</strong> <a href="mailto:grannysgiftinc@gmail.com">grannysgiftinc@gmail.com</a></li>
+            <li>
+              <strong>Email:</strong>
+              <a href="mailto:grannysgiftinc@gmail.com">grannysgiftinc@gmail.com</a>
+            </li>
             <li><strong>Pickup Area:</strong> Sea-Tac / South Seattle</li>
           </ul>
         </section>
 
-        <!-- Newsletter (Name optional; Email required) -->
+        <!-- Newsletter -->
         <section id="newsletter" class="info newsletter-card">
           <h2>Get news &amp; sales</h2>
           <form id="newsletterForm" novalidate>
             <div class="row">
               <label for="nl_name">Name (optional)</label>
-              <input id="nl_name" name="nl_name" type="text" autocomplete="name" />
+              <input
+                id="nl_name"
+                name="nl_name"
+                type="text"
+                autocomplete="name"
+              />
             </div>
             <div class="row">
-              <label for="nl_email">Email <span class="req" aria-hidden="true">*</span></label>
-              <input id="nl_email" name="nl_email" type="email" autocomplete="email" required />
+              <label for="nl_email">
+                Email <span class="req" aria-hidden="true">*</span>
+              </label>
+              <input
+                id="nl_email"
+                name="nl_email"
+                type="email"
+                autocomplete="email"
+                required
+              />
             </div>
-            <input id="nl_website" name="nl_website" autocomplete="off" tabindex="-1" class="hp" aria-hidden="true" />
-            <button id="nl_submit" type="submit" class="btn small" disabled>Join the list</button>
+            <input
+              id="nl_website"
+              name="nl_website"
+              autocomplete="off"
+              tabindex="-1"
+              class="hp"
+              aria-hidden="true"
+            />
+            <button id="nl_submit" type="submit" class="btn small" disabled>
+              Join the list
+            </button>
           </form>
-          <p class="muted tiny">We respect your inbox. Unsubscribe anytime.</p>
+          <p class="muted tiny">
+            We respect your inbox. Unsubscribe anytime.
+          </p>
         </section>
       </section>
 
-      <!-- RIGHT: Whole cake image + short menu -->
+      <!-- RIGHT: Hero photo + menu -->
       <aside class="product-hero card" aria-label="Product photo and menu">
         <figure class="hero-figure">
-          <img class="hero-cake"
-               src="images/DSC_9628.JPG"
-               alt="Whole 7UP pound cake – Granny’s Gift">
-          <figcaption class="muted">Whole 7UP Pound Cake — <strong>10-inch</strong></figcaption>
+          <img
+            class="hero-cake"
+            src="images/CakeBlackBackground.jpg"
+            alt="Whole 10-inch Granny’s Gift 7UP pound cake"
+          >
+          <figcaption class="muted">
+            Whole 7UP Pound Cake — <strong>10-inch</strong>
+          </figcaption>
         </figure>
 
         <!-- Flavor sign -->
         <p class="flavor-tag">Lemon-lime flavored, moist pound cake</p>
 
-        <!-- Short pricing menu -->
+        <!-- Menu & pricing -->
         <div class="menu-card">
           <h3 class="menu-title">Menu & Pricing</h3>
           <ul class="menu-list" role="list">
             <li><span>Whole Cake (10&quot;)</span><span>$34.99</span></li>
-            <li><span>Cupcake (Jumbo)</span><span>$5.99</span></li>
+            <li><span>Cupcake (Jumbo)(2)</span><span>$5.99</span></li>
           </ul>
-          <p class="menu-note tiny muted">Local pickup near Sea-Tac. Tax may apply.</p>
+          <p class="menu-note tiny muted">
+            Local pickup near Sea-Tac. Tax may apply.
+          </p>
         </div>
       </aside>
 
-      <!-- BELOW: Larger (but screen-friendly) gallery -->
+      <!-- BELOW: Cake gallery -->
       <section class="gallery card" aria-labelledby="gallery-title">
         <h2 id="gallery-title">See More</h2>
         <div class="gallery-grid">
-          <img src="images/DSC_9628.JPG" alt="Whole 7UP pound cake">
-          <img src="images/DSC04175.jpg" alt="Whole 7UP pound cake – side view">
-          <img src="images/DSC_9629.JPG" alt="Whole 7UP pound cake (alternate angle)">
-          <img src="images/DSC04187.jpg" alt="Whole 7UP pound cake – fresh from the oven">
+          <img
+            src="images/CakeBlackBackground.jpg"
+            alt="Top view of Granny’s Gift 7UP pound cake against a dark background"
+          >
+          <img
+            src="images/CakeMainHolding.jpg"
+            alt="Freshly baked 7UP pound cake being held in the pan"
+          >
+          <img
+            src="images/DSC_9628.JPG"
+            alt="Whole 7UP pound cake on a cake board"
+          >
         </div>
       </section>
     </section>
   </main>
 
-  <!-- EmailJS + Site JS -->
+  <!-- EmailJS + site JS -->
   <script src="https://cdn.jsdelivr.net/npm/@emailjs/browser@4/dist/email.min.js"></script>
   <script defer src="script.js"></script>
 </body>
