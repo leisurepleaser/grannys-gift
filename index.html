@@ -16,10 +16,9 @@
   <!-- Brand banner (fits, no crop) -->
   <header class="brand-hero">
     <img src="images/grannysgift_banner.png" alt="Granny’s Gift banner" loading="eager" decoding="async">
-    <!-- Seasonal sticker -->
-    <div class="promo-sticker">Thanksgiving preorders <strong>SOLD OUT</strong></div>
+    <!-- Sold-out badge -->
+    <div class="promo-sticker"><strong>Sold Out</strong></div>
   </header>
-
 
   <main class="wrap">
     <!-- Two-column hero: left = order form; right = whole-cake image -->
@@ -39,17 +38,20 @@
           <p class="muted">Need to add details? Just reply to the confirmation email.</p>
         </div>
 
-        <!-- Order form (IDs match your script.js) -->
+        <!-- Order form (IDs match script.js) -->
         <form id="orderForm" novalidate>
-          <div class="row"><label for="name">Name <span class="req">*</span></label>
+          <div class="row">
+            <label for="name">Name <span class="req">*</span></label>
             <input id="name" name="name" type="text" autocomplete="name" required />
           </div>
 
-          <div class="row"><label for="phone">Phone Number <span class="req">*</span></label>
+          <div class="row">
+            <label for="phone">Phone Number <span class="req">*</span></label>
             <input id="phone" name="phone" type="text" inputmode="tel" required />
           </div>
 
-          <div class="row"><label for="email">Email <span class="req">*</span></label>
+          <div class="row">
+            <label for="email">Email <span class="req">*</span></label>
             <input id="email" name="email" type="email" autocomplete="email" required />
           </div>
 
@@ -84,7 +86,9 @@
           </div>
 
           <div class="total-row">
-            <div id="orderTotal" class="total-box" aria-live="polite" aria-atomic="true">Estimated total: —</div>
+            <div id="orderTotal" class="total-box" aria-live="polite" aria-atomic="true">
+              Estimated total: —
+            </div>
           </div>
 
           <!-- Honeypot -->
@@ -99,12 +103,19 @@
         <!-- Our Story (heritage / nostalgia) -->
         <section id="about" class="info about-story">
           <h2>Our Story</h2>
+          <p class="about-tagline">
+            A heritage lemon–lime 7UP pound cake, baked from one family’s secret.
+          </p>
           <p>
-            Granny’s Gift is a lemon-lime 7UP pound cake baked from a
+            Granny’s Gift is a lemon-lime 7UP pound cake made from a
             <strong>50+ year secret family recipe</strong> created by Dolores “Granny” Jett.
-            She taught her daughter, who taught me — today, only my mom and I know the exact recipe.
-            Every cake is mixed and baked by hand in our Washington home kitchen, just like Granny did
-            for holidays and Sunday dinners, so every slice tastes like family, nostalgia, and home.
+            She taught her granddaughter — my mother — who then taught me. Today, only the two of us
+            know the full recipe and method.
+          </p>
+          <p>
+            Each cake is mixed and baked by hand in our Washington home kitchen, preserving the same
+            care, patience, and tradition that once anchored Granny’s holiday tables. When you serve
+            Granny’s Gift, you’re sharing a slice of family history, nostalgia, and home.
           </p>
         </section>
 
@@ -168,7 +179,6 @@
           <p class="menu-note tiny muted">Local pickup near Sea-Tac. Tax may apply.</p>
         </div>
       </aside>
-
 
       <!-- BELOW: Larger (but screen-friendly) gallery -->
       <section class="gallery card" aria-labelledby="gallery-title">
