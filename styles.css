@@ -107,3 +107,30 @@ input:focus, select:focus, textarea:focus {
 @media (max-width: 420px) {
   .input-table td:first-child { width: 42%; }
 }
+
+/* Flavor sign under hero photo */
+.flavor-tag{
+  display: inline-flex;
+  align-items: center;
+  padding: 6px 12px;
+  margin: 10px 0 4px;
+  border-radius: 999px;
+  background: var(--brand-cream);
+  border: 1px solid #ffe082;
+  font-size: 13px;
+  font-weight: 600;
+  color: var(--brand-ink);
+}
+
+/* Our Story block inside the left card */
+.about-story{
+  background: #f7efff;
+  border-radius: 12px;
+  padding: 10px 12px;
+  border: 1px dashed #e1d3f5;
+  margin-bottom: 12px;
+}
+.about-story p{
+  margin: 4px 0 0;
+  font-size: 14px;
+}
