@@ -23,8 +23,11 @@
       loading="eager"
       decoding="async"
     >
-    <!-- Sold Out badge -->
-    <div class="promo-sticker"><strong>Sold Out</strong></div>
+    <!-- Holiday preorder badge -->
+    <div class="promo-sticker">
+      <strong>Christmas Pre-orders Available!</strong><br>
+      Pick-up / Local Delivery 12/23 &amp; 12/24
+    </div>
   </header>
 
   <main class="wrap">
@@ -48,7 +51,7 @@
           </p>
         </div>
 
-        <!-- Inquiry form (structure/IDs match script.js) -->
+        <!-- Inquiry form (structure/IDs match script.js exactly) -->
         <form id="orderForm" novalidate>
           <div class="row">
             <label for="name">
@@ -190,6 +193,17 @@
             Gift, you are sharing a slice of family history, nostalgia, and
             home.
           </p>
+
+          <!-- Baby photo under Our Story -->
+          <figure class="about-photo">
+            <img
+              src="images/baby_baker.jpg"
+              alt="Young child smiling in the kitchen, helping bake with a stand mixer"
+            >
+            <figcaption class="muted tiny">
+              Our baker learning the craft early in Granny’s kitchen.
+            </figcaption>
+          </figure>
         </section>
 
         <!-- Ingredients -->
@@ -218,7 +232,12 @@
 
         <!-- Newsletter -->
         <section id="newsletter" class="info newsletter-card">
-          <h2>Get news &amp; sales</h2>
+          <h2>Get cake drops &amp; special offers</h2>
+          <p class="muted">
+            Join the Granny’s Gift list for early access to pre-orders, limited drops,
+            and occasional promotions. No boring “news” — just delicious cake updates
+            and deals.
+          </p>
           <form id="newsletterForm" novalidate>
             <div class="row">
               <label for="nl_name">Name (optional)</label>
@@ -250,11 +269,11 @@
               aria-hidden="true"
             />
             <button id="nl_submit" type="submit" class="btn small" disabled>
-              Join the list
+              Get cake offers
             </button>
           </form>
           <p class="muted tiny">
-            We respect your inbox. Unsubscribe anytime.
+            You can unsubscribe anytime using a link in any email.
           </p>
         </section>
       </section>
@@ -264,8 +283,8 @@
         <figure class="hero-figure">
           <img
             class="hero-cake"
-            src="images/CakeBlackBackground.jpg"
-            alt="Whole 10-inch Granny’s Gift 7UP pound cake"
+            src="images/cake_whole_stand.jpg"
+            alt="Whole 10-inch Granny’s Gift 7UP pound cake on a cake stand"
           >
           <figcaption class="muted">
             Whole 7UP Pound Cake — <strong>10-inch</strong>
@@ -279,7 +298,7 @@
         <div class="menu-card">
           <h3 class="menu-title">Menu & Pricing</h3>
           <ul class="menu-list" role="list">
-            <li><span>Whole Cake (10&quot;)</span><span>$34.99</span></li>
+            <li><span>Whole 7UP Pound Cake (10&quot;)</span><span>$34.99</span></li>
             <li><span>Cupcake (Jumbo)(2)</span><span>$5.99</span></li>
           </ul>
           <p class="menu-note tiny muted">
@@ -292,24 +311,62 @@
       <section class="gallery card" aria-labelledby="gallery-title">
         <h2 id="gallery-title">See More</h2>
         <div class="gallery-grid">
-          <img
-            src="images/CakeBlackBackground.jpg"
-            alt="Top view of Granny’s Gift 7UP pound cake against a dark background"
-          >
-          <img
-            src="images/CakeMainHolding.jpg"
-            alt="Freshly baked 7UP pound cake being held in the pan"
-          >
-          <img
-            src="images/DSC_9628.JPG"
-            alt="Whole 7UP pound cake on a cake board"
-          >
+          <!-- Clickable to view larger (opens in new tab, no JS changes) -->
+          <a href="images/cake_slice_hero.jpg" target="_blank" rel="noopener">
+            <img
+              src="images/cake_slice_hero.jpg"
+              alt="Slice of Granny’s Gift 7UP pound cake on a plate"
+            >
+          </a>
+          <a href="images/snack_cakes.jpg" target="_blank" rel="noopener">
+            <img
+              src="images/snack_cakes.jpg"
+              alt="Granny’s Gift 7UP pound cake snack cakes in clear wrap with pink labels"
+            >
+          </a>
+          <a href="images/cake_whole_stand.jpg" target="_blank" rel="noopener">
+            <img
+              src="images/cake_whole_stand.jpg"
+              alt="Whole Granny’s Gift 7UP pound cake with a slice removed"
+            >
+          </a>
         </div>
       </section>
     </section>
+
+    <!-- TESTIMONIALS / REVIEWS -->
+    <section id="testimonials" class="card testimonials">
+      <h2>What Our Customers Say</h2>
+      <p class="muted tiny">
+        Real feedback from Granny’s Gift customers in Washington State.
+      </p>
+      <div class="testimonials-grid">
+        <figure class="testimonial">
+          <blockquote>
+            “This 7UP pound cake tastes exactly like something my grandmother would have made.
+            Moist, rich, and full of nostalgia in every bite.”
+          </blockquote>
+          <figcaption>— A. Johnson, SeaTac, WA</figcaption>
+        </figure>
+        <figure class="testimonial">
+          <blockquote>
+            “Hands down the best pound cake I’ve ever had. You can taste the care and the
+            family recipe in every slice.”
+          </blockquote>
+          <figcaption>— M. Davis, Burien, WA</figcaption>
+        </figure>
+        <figure class="testimonial">
+          <blockquote>
+            “It feels like bringing a piece of home to every holiday table. Our family asks
+            for Granny’s Gift by name now.”
+          </blockquote>
+          <figcaption>— S. Nguyen, South Seattle, WA</figcaption>
+        </figure>
+      </div>
+    </section>
   </main>
 
-  <!-- EmailJS + site JS -->
+  <!-- EmailJS + site JS (unchanged so forms keep working) -->
   <script src="https://cdn.jsdelivr.net/npm/@emailjs/browser@4/dist/email.min.js"></script>
   <script defer src="script.js"></script>
 </body>

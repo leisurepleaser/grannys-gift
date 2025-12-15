@@ -300,3 +300,20 @@ textarea { resize: vertical; min-height: 96px; }
   letter-spacing: .12em;
 }
 
+/* Baby photo under Our Story */
+.about-photo{
+  margin-top: 10px;
+  text-align: center;
+}
+.about-photo img{
+  max-width: 240px;
+  width: 100%;
+  height: auto;
+  border-radius: 16px;
+  box-shadow: 0 8px 20px rgba(0,0,0,.18);
+}
+.about-photo figcaption{
+  margin-top: 4px;
+}
+
+
