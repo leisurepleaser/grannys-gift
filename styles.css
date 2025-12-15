@@ -1,7 +1,11 @@
 /* =========================
    Granny’s Gift — styles.css
-   Two-column hero (form + photo) + gallery
+   Two-column hero (form + photo) + gallery + testimonials
+   Luxury Garamond styling
    ========================= */
+
+/* Webfont (optional but helps): EB Garamond */
+@import url('https://fonts.googleapis.com/css2?family=EB+Garamond:wght@400;500;600;700&display=swap');
 
 /* ---- Brand palette ---- */
 :root{
@@ -19,7 +23,7 @@
 html, body { height: 100%; }
 body {
   margin: 0;
-  font-family: system-ui, -apple-system, Segoe UI, Roboto, Helvetica, Arial, "Apple Color Emoji", "Segoe UI Emoji";
+  font-family: "EB Garamond", "Garamond", "Apple Garamond", "Georgia", "Times New Roman", serif;
   color: var(--brand-ink);
   background: #FBF5FF; /* light lavender */
   line-height: 1.45;
@@ -28,17 +32,54 @@ body {
 /* Center container */
 .wrap { max-width: var(--wrap-max); margin: 0 auto; padding: 0 12px; }
 
-/* Banner (no crop, compact) */
-.brand-hero { margin: 8px auto 10px; max-width: var(--wrap-max); padding: 0 12px; }
-.brand-hero img {
-  display: block; width: 100%; height: auto; object-fit: contain;
-  max-height: 120px; border-radius: 14px; box-shadow: 0 8px 24px rgba(0,0,0,.08);
+/* ===== Brand hero (top) ===== */
+
+.brand-hero{
+  margin: 10px auto 14px;
+  max-width: var(--wrap-max);
+  padding: 0 12px;
 }
 
-/* Card base */
-.card{
-  background:#fff; border:1px solid #eee; border-radius:16px; padding:16px;
-  box-shadow:0 10px 28px rgba(90,21,138,.08);
+.promo-hero{
+  background: linear-gradient(135deg, var(--brand-deep), var(--brand-mid));
+  border-radius: 20px;
+  padding: 14px 18px 18px;
+  color: #fff;
+  box-shadow: 0 12px 32px rgba(90,21,138,.22);
+  border: 2px solid var(--brand-gold);
+  text-align: center;
+}
+
+.brand-wordmark{
+  font-size: 1.6rem;
+  font-weight: 600;
+  letter-spacing: 0.18em; /* luxury kerning */
+  text-transform: uppercase;
+  margin-bottom: 6px;
+}
+
+.promo-hero-body{
+  max-width: 540px;
+  margin: 0 auto;
+}
+
+.promo-eyebrow{
+  font-size: 11px;
+  letter-spacing: 0.18em;
+  text-transform: uppercase;
+  opacity: 0.9;
+  margin-bottom: 4px;
+}
+
+.promo-main{
+  font-size: 1.35rem;
+  font-weight: 700;
+  margin: 0;
+}
+
+.promo-sub{
+  font-size: 0.9rem;
+  margin-top: 4px;
 }
 
 /* ===== Two-column hero ===== */
@@ -49,13 +90,13 @@ body {
   align-items: start;
 }
 
-/* Right-side photo: fits, never cropped */
+/* Right-side photo */
 .product-hero { position: sticky; top: 10px; }
 .hero-figure { margin: 0; }
 .hero-cake{
   width: 100%;
   height: auto;          /* don't crop this hero image */
-  object-fit: contain;   /* show full cake “in its full glory” */
+  object-fit: contain;   /* show full cake */
   border-radius: 12px;
   box-shadow: 0 8px 24px rgba(0,0,0,.10);
 }
@@ -66,8 +107,11 @@ body {
   .product-hero { position: static; }
 }
 
-/* ===== Form & controls ===== */
-h1, h2 { margin: 6px 0 10px; color: var(--brand-ink); }
+/* ===== Typography & general ===== */
+h1, h2 {
+  margin: 6px 0 10px;
+  color: var(--brand-ink);
+}
 
 .row { margin: 8px 0; }
 .row.two { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; }
@@ -80,6 +124,7 @@ select,
 textarea {
   width: 100%; padding: 10px 12px; border: 1px solid #ddd; border-radius: 10px;
   background:#fff; color: var(--brand-ink); font-size: 16px;
+  font-family: inherit;
 }
 input:focus, select:focus, textarea:focus {
   outline: 3px solid rgba(142,36,170,.18);
@@ -98,6 +143,7 @@ textarea { resize: vertical; min-height: 96px; }
   padding:10px 16px; border-radius:12px;
   box-shadow:0 6px 16px rgba(90,21,138,.18);
   cursor: pointer;
+  font-family: inherit;
 }
 .btn[disabled]{ opacity:.55; cursor:not-allowed; }
 .btn.ready{ outline: 3px solid var(--brand-gold); }
@@ -144,7 +190,7 @@ textarea { resize: vertical; min-height: 96px; }
 .ingredients-list li::before{ content:"•"; color:#FFE082; margin-right:6px; }
 .ingredients-card strong { color: #FFD54F; font-weight: 800; }
 
-/* Contact (subtle fruit border) */
+/* Contact */
 .contact-card{
   background:#fff; border-radius:14px; padding:12px;
   border: 12px solid transparent; border-image-slice:30; border-image-repeat:round;
@@ -152,7 +198,7 @@ textarea { resize: vertical; min-height: 96px; }
   <svg xmlns='http://www.w3.org/2000/svg' width='60' height='30' viewBox='0 0 60 30'>\
     <rect width='60' height='30' fill='none'/>\
     <circle cx='15' cy='15' r='10' fill='%23FFEB3B' stroke='%23FBC02D' stroke-width='3'/>\
-    <circle cx='30' cy='15' r='10' fill='%234CAF50' stroke='%232E7D32' stroke-width='3'/>\
+    <circle cx='30' cy='15' r="10" fill='%234CAF50' stroke='%232E7D32' stroke-width='3'/>\
     <g transform='translate(45 15)'><circle r='10' fill='%238D6E63'/><circle r='6' fill='%23FAFAFA'/></g>\
   </svg>");
 }
@@ -164,12 +210,15 @@ textarea { resize: vertical; min-height: 96px; }
 .gallery h2 { margin-top: 0; }
 .gallery-grid{
   display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
+  grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
   gap: 12px;
+}
+.gallery-grid a{
+  display: block;
 }
 .gallery-grid img{
   width: 100%;
-  height: clamp(200px, 32vh, 340px);  /* larger, but never too tall */
+  height: clamp(200px, 32vh, 340px);
   object-fit: cover;
   border-radius: 12px;
   box-shadow: 0 6px 18px rgba(0,0,0,.08);
@@ -178,31 +227,6 @@ textarea { resize: vertical; min-height: 96px; }
 /* Compact on small screens */
 @media (max-width: 540px){
   .row.two { grid-template-columns: 1fr; }
-}
-
-/* === Seasonal sticker (near top of banner) === */
-.brand-hero { position: relative; } /* enable absolute positioning inside */
-.promo-sticker{
-  position: absolute; top: 10px; right: 22px;
-  background: linear-gradient(180deg, var(--brand-lite), var(--brand-mid));
-  color: #fff;
-  border: 2px solid var(--brand-gold);
-  border-radius: 999px;
-  padding: 7px 16px;
-  font-weight: 900;
-  font-size: 16px;
-  letter-spacing: .16em;
-  text-transform: uppercase;
-  box-shadow: 0 6px 18px rgba(90,21,138,.18);
-  white-space: nowrap;
-}
-.promo-sticker strong{ color: #FFF59D; font-weight: 900; }
-
-@media (max-width: 960px){
-  /* on small screens, place sticker below the banner neatly */
-  .promo-sticker{
-    position: static; display: inline-block; margin: 8px 0 0 0;
-  }
 }
 
 /* === Product menu (right column) === */
@@ -236,17 +260,6 @@ textarea { resize: vertical; min-height: 96px; }
 }
 .menu-note{ margin-top: 8px; }
 
-/* Keep hero layout behavior from earlier */
-.product-hero { position: sticky; top: 10px; }
-.hero-figure { margin: 0; }
-.hero-cake{
-  width: 100%;
-  height: auto;              /* show the full cake, never cropped */
-  object-fit: contain;
-  border-radius: 12px;
-  box-shadow: 0 8px 24px rgba(0,0,0,.10);
-}
-
 /* Flavor sign under hero photo */
 .flavor-tag{
   display: inline-flex;
@@ -261,7 +274,7 @@ textarea { resize: vertical; min-height: 96px; }
   color: var(--brand-ink);
 }
 
-/* Our Story block inside the left card */
+/* Our Story block */
 .about-story{
   position: relative;
   background: linear-gradient(135deg, var(--brand-cream), #f4e5ff);
@@ -273,14 +286,14 @@ textarea { resize: vertical; min-height: 96px; }
   overflow: hidden;
 }
 .about-story::before{
-  content: "Granny";
+  content: "GRANNY";
   position: absolute;
   right: -10px;
   bottom: -24px;
   font-size: 56px;
   font-weight: 800;
   color: rgba(90,21,138,.06);
-  letter-spacing: .08em;
+  letter-spacing: .18em;
   transform: rotate(-8deg);
   pointer-events: none;
 }
@@ -312,8 +325,36 @@ textarea { resize: vertical; min-height: 96px; }
   border-radius: 16px;
   box-shadow: 0 8px 20px rgba(0,0,0,.18);
 }
-.about-photo figcaption{
-  margin-top: 4px;
-}
 
+/* ===== Testimonials ===== */
+.testimonials{
+  margin: 18px 0 24px;
+}
+.testimonials h2{
+  margin-top: 0;
+}
+.testimonials-grid{
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
+  gap: 12px;
+  margin-top: 8px;
+}
+.testimonial{
+  margin: 0;
+  padding: 10px 12px;
+  border-radius: 12px;
+  border: 1px solid #eee;
+  background: #fdf8ff;
+  box-shadow: 0 4px 12px rgba(90,21,138,.06);
+}
+.testimonial blockquote{
+  margin: 0 0 6px 0;
+  font-size: 14px;
+  line-height: 1.5;
+}
+.testimonial figcaption{
+  font-size: 12px;
+  font-weight: 600;
+  color: var(--brand-mid);
+}
 
