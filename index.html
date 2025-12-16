@@ -15,7 +15,7 @@
 </head>
 <body>
 
-  <!-- Brand hero (replaces banner image) -->
+  <!-- Brand hero -->
   <header class="brand-hero">
     <div class="promo-hero">
       <div class="brand-wordmark">GRANNY'S GIFT</div>
@@ -116,7 +116,9 @@
                 <option value="7">7</option><option value="8">8</option>
                 <option value="9">9</option><option value="10">10</option>
                 <option value="11">11</option><option value="12">12</option>
-                <option value="Party Order (24+)">Party Order (24+)</option>
+                <option value="Party Order">
+                  Party Order (Snack Cakes 24+, Whole Cakes 3+)
+                </option>
               </select>
             </div>
           </div>
@@ -128,7 +130,7 @@
               name="message"
               maxlength="300"
               rows="3"
-              placeholder="Up to 300 characters"
+              placeholder="Up to 300 characters (e.g. Party Order amounts, pickup time)"
             ></textarea>
             <small id="charCount" class="muted">0/300</small>
           </div>
@@ -271,6 +273,7 @@
 
       <!-- RIGHT: Hero photo + menu -->
       <aside class="product-hero card" aria-label="Product photo and menu">
+        <!-- Whole cake hero above menu -->
         <figure class="hero-figure">
           <img
             class="hero-cake"
@@ -293,28 +296,51 @@
             <li><span>Snack Cake (2oz)</span><span>$2.99</span></li>
           </ul>
           <p class="menu-note tiny muted">
-            Snack Cakes (2oz) are limited to 12 per customer per order.
-            Need more than 12? Pre-order as a <strong>Party Order (24+)</strong>.
+            Whole 10&quot; cakes are limited to <strong>2 per customer</strong> per
+            standard order. Need more? Select <strong>Party Order</strong> in the
+            quantity dropdown and specify your desired number in the message box
+            (Party Orders for whole cakes typically start at <strong>3+</strong>).
+          </p>
+          <p class="menu-note tiny muted">
+            Snack Cakes (2oz) are sold in <strong>increments of 12</strong> and are
+            limited to <strong>12 snack cakes</strong> per standard order
+            (one set of 12). Need more than 12? Select
+            <strong>Party Order (Snack Cakes 24+)</strong> and include your total
+            requested amount in the message box.
+          </p>
+          <p class="menu-note tiny muted">
             Local pickup near Sea-Tac. Tax may apply.
           </p>
         </div>
+
+        <!-- Christmas snack cakes image below menu -->
+        <figure class="hero-figure hero-figure-secondary">
+          <img
+            class="hero-cake"
+            src="images/christmas_snack_cakes.JPG"
+            alt="Christmas display of Granny’s Gift 7UP snack cakes arranged on a blue snowflake plate"
+          >
+          <figcaption class="muted">
+            Holiday snack cakes — perfect for sharing or gifting
+          </figcaption>
+        </figure>
       </aside>
 
       <!-- BELOW: Cake gallery -->
       <section class="gallery card" aria-labelledby="gallery-title">
         <h2 id="gallery-title">See More</h2>
         <div class="gallery-grid">
-          <!-- Clickable to view larger (opens in new tab, no JS changes) -->
+          <!-- Clickable to view larger (opens in new tab) -->
           <a href="images/cake_slice_hero.jpg" target="_blank" rel="noopener">
             <img
               src="images/cake_slice_hero.jpg"
               alt="Slice of Granny’s Gift 7UP pound cake on a plate"
             >
           </a>
-          <a href="images/snack_cakes.jpg" target="_blank" rel="noopener">
+          <a href="images/cake_slice_above.jpg" target="_blank" rel="noopener">
             <img
-              src="images/snack_cakes.jpg"
-              alt="Granny’s Gift 7UP pound cake snack cakes in clear wrap with labels"
+              src="images/cake_slice_above.jpg"
+              alt="Slice of Granny’s Gift 7UP pound cake photographed from above on a white plate with utensils"
             >
           </a>
           <a href="images/cake_whole_stand.jpg" target="_blank" rel="noopener">
@@ -333,7 +359,7 @@
       </section>
     </section>
 
-    <!-- TESTIMONIALS / REVIEWS (real customer quotes) -->
+    <!-- TESTIMONIALS / REVIEWS -->
     <section id="testimonials" class="card testimonials">
       <h2>What Our Customers Say</h2>
       <p class="muted tiny">
@@ -386,7 +412,7 @@
   <script src="https://cdn.jsdelivr.net/npm/@emailjs/browser@4/dist/email.min.js"></script>
   <script src="script.js"></script>
   <script>
-    // Small override so "Party Order (24+)" shows "TBD" instead of a dollar total
+    // Override so "Party Order" shows "TBD" instead of a dollar total
     window.addEventListener('DOMContentLoaded', function () {
       var qty = document.getElementById('quantity');
       var size = document.getElementById('size');
@@ -394,7 +420,7 @@
       if (!qty || !totalBox) return;
 
       function maybeOverrideTotal() {
-        if (qty.value === 'Party Order (24+)') {
+        if (qty.value === 'Party Order') {
           totalBox.textContent = 'Estimated total: TBD';
         }
       }
