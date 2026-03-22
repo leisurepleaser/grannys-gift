@@ -258,6 +258,11 @@ input:focus{
   text-align: center;
 }
 
+/* critical fix: keep lightbox hidden until clicked */
+.lightbox[hidden]{
+  display: none !important;
+}
+
 .lightbox{
   position: fixed;
   inset: 0;
