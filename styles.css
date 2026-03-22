@@ -1,13 +1,13 @@
 @import url('https://fonts.googleapis.com/css2?family=EB+Garamond:wght@400;500;600;700&display=swap');
 
 :root{
-  --brand-deep: #766a85;
-  --brand-mid:  #92859f;
-  --brand-lite: #b7adbf;
-  --brand-accent: #bca892;
-  --brand-ink:  #3b3440;
-  --brand-cream:#f5eee6;
-  --brand-panel:#fbf7f3;
+  --brand-deep: #6f9780;
+  --brand-mid:  #8AAE93;
+  --brand-lite: #b8cdc0;
+  --brand-accent: #EEEEDD;
+  --brand-ink:  #37423b;
+  --brand-cream:#f7f5ef;
+  --brand-panel:#fcfbf8;
   --wrap-max: 1120px;
 }
 
@@ -19,8 +19,12 @@ body {
   margin: 0;
   font-family: "EB Garamond", "Garamond", "Apple Garamond", "Georgia", serif;
   color: var(--brand-ink);
-  background: #f8f3f6;
+  background: #f6f6f1;
   line-height: 1.45;
+}
+
+body.lightbox-open {
+  overflow: hidden;
 }
 
 .wrap {
@@ -36,11 +40,11 @@ body {
 }
 
 .promo-hero{
-  background: linear-gradient(135deg, #7d728d, #9688a3);
+  background: linear-gradient(135deg, #7ea18a, #97b6a0);
   border-radius: 20px;
   padding: 18px 18px 20px;
   color: #fff;
-  box-shadow: 0 12px 32px rgba(86, 72, 98, .18);
+  box-shadow: 0 12px 32px rgba(94, 123, 103, .16);
   border: 2px solid var(--brand-accent);
   text-align: center;
 }
@@ -57,15 +61,15 @@ body {
   margin: 6px 0 0;
   font-size: 1rem;
   letter-spacing: 0.08em;
-  color: rgba(255,255,255,.9);
+  color: rgba(255,255,255,.92);
 }
 
 .card{
   background: #fff;
-  border: 1px solid #e9e1e6;
+  border: 1px solid #e5e7df;
   border-radius: 16px;
   padding: 16px;
-  box-shadow: 0 10px 28px rgba(118,106,133,.08);
+  box-shadow: 0 10px 28px rgba(111,151,128,.08);
 }
 
 .brand-layout{
@@ -87,13 +91,20 @@ body {
   box-shadow: 0 10px 26px rgba(0,0,0,.08);
 }
 
+.featured-shot-tall img{
+  height: auto;
+  max-height: none;
+  object-fit: contain;
+  background: #fff;
+}
+
 .seasonal-figure{
   margin: 0 0 14px;
   padding: 12px;
-  border: 1px solid #ddd3db;
+  border: 1px solid #dfe4dc;
   border-radius: 18px;
   background: linear-gradient(180deg, #fff, var(--brand-panel));
-  box-shadow: 0 8px 18px rgba(118,106,133,.06);
+  box-shadow: 0 8px 18px rgba(111,151,128,.06);
 }
 
 .seasonal-figure-lower{
@@ -103,9 +114,9 @@ body {
 .photo-caption{
   margin-top: 10px;
   padding-top: 8px;
-  border-top: 1px solid #e5d9df;
+  border-top: 1px solid #e4e8df;
   font-size: 1rem;
-  color: var(--brand-deep);
+  color: #6f9780;
 }
 
 .gallery-grid{
@@ -114,8 +125,14 @@ body {
   gap: 12px;
 }
 
-.gallery-grid a{
+.gallery-open{
   display: block;
+  width: 100%;
+  padding: 0;
+  margin: 0;
+  border: 0;
+  background: transparent;
+  cursor: zoom-in;
 }
 
 .gallery-grid img{
@@ -132,14 +149,14 @@ body {
 }
 
 .ingredients-card{
-  background: linear-gradient(135deg, #8d809b, #a89caf 60%, #c4bac8);
+  background: linear-gradient(135deg, #88a797, #9eb9a8 60%, #c8d7cb);
   color: #fff;
   border: 2px solid var(--brand-accent);
 }
 
 .ingredients-card h2{
   margin-top: 0;
-  color: #fffaf4;
+  color: #fffefb;
 }
 
 .ingredients-list{
@@ -153,7 +170,7 @@ body {
 
 .ingredients-list li::before{
   content: "•";
-  color: #f2dfc8;
+  color: var(--brand-accent);
   margin-right: 6px;
 }
 
@@ -173,7 +190,7 @@ input[type="text"],
 input[type="email"]{
   width: 100%;
   padding: 10px 12px;
-  border: 1px solid #d9ced7;
+  border: 1px solid #d7ddd6;
   border-radius: 10px;
   background:#fff;
   color: var(--brand-ink);
@@ -182,11 +199,11 @@ input[type="email"]{
 }
 
 input:focus{
-  outline: 3px solid rgba(146,133,159,.18);
+  outline: 3px solid rgba(138,174,147,.18);
   border-color: var(--brand-mid);
 }
 
-.muted { color: #6b6572; }
+.muted { color: #667168; }
 .tiny  { font-size: 12px; }
 .hp { display: none !important; }
 
@@ -197,7 +214,7 @@ input:focus{
   font-weight:700;
   padding:10px 16px;
   border-radius:12px;
-  box-shadow:0 6px 16px rgba(118,106,133,.16);
+  box-shadow:0 6px 16px rgba(111,151,128,.14);
   cursor: pointer;
   font-family: inherit;
 }
@@ -208,7 +225,7 @@ input:focus{
 }
 
 .btn.ready{
-  outline: 3px solid rgba(188,168,146,.45);
+  outline: 3px solid rgba(238,238,221,.55);
 }
 
 .btn.small{
@@ -217,8 +234,8 @@ input:focus{
 }
 
 .success-panel {
-  background: #f3edf6;
-  border: 1px solid #ded0e6;
+  background: #eef4ef;
+  border: 1px solid #d9e5dc;
   border-radius: 14px;
   padding: 12px;
   margin-bottom: 10px;
@@ -239,6 +256,42 @@ input:focus{
 .footer-note{
   padding-bottom: 20px;
   text-align: center;
+}
+
+.lightbox{
+  position: fixed;
+  inset: 0;
+  background: rgba(25, 29, 26, .82);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 24px;
+  z-index: 9999;
+}
+
+.lightbox-image{
+  max-width: min(92vw, 1080px);
+  max-height: 88vh;
+  width: auto;
+  height: auto;
+  border-radius: 18px;
+  box-shadow: 0 18px 44px rgba(0,0,0,.28);
+  background: #fff;
+}
+
+.lightbox-close{
+  position: absolute;
+  top: 18px;
+  right: 18px;
+  width: 44px;
+  height: 44px;
+  border: 0;
+  border-radius: 999px;
+  background: rgba(255,255,255,.92);
+  color: var(--brand-ink);
+  font-size: 28px;
+  line-height: 1;
+  cursor: pointer;
 }
 
 @media (max-width: 900px){

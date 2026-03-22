@@ -28,46 +28,70 @@
           <a class="featured-shot" href="images/christmas_cake.JPG" target="_blank" rel="noopener">
             <img
               src="images/christmas_cake.JPG"
-              alt="Granny’s Gift whole 10-inch cake and holiday snack cakes arranged for Christmas"
+              alt="Granny’s Gift whole 10-inch cake arranged for Christmas"
             >
           </a>
           <figcaption class="photo-caption">
-            Whole 10-inch cake with holiday snack cakes.
+            Whole 10-inch cake.
           </figcaption>
         </figure>
 
         <div class="gallery-grid">
-          <a href="images/cake_whole_stand.jpg" target="_blank" rel="noopener">
+          <button
+            type="button"
+            class="gallery-open"
+            data-image="images/cake_whole_stand.jpg"
+            data-alt="Whole Granny’s Gift 7UP pound cake on a stand"
+            aria-label="Expand whole cake photo"
+          >
             <img
               src="images/cake_whole_stand.jpg"
               alt="Whole Granny’s Gift 7UP pound cake on a stand"
             >
-          </a>
+          </button>
 
-          <a href="images/cake_slice_hero.jpg" target="_blank" rel="noopener">
+          <button
+            type="button"
+            class="gallery-open"
+            data-image="images/cake_slice_hero.jpg"
+            data-alt="Slice of Granny’s Gift 7UP pound cake on a plate"
+            aria-label="Expand cake slice photo"
+          >
             <img
               src="images/cake_slice_hero.jpg"
               alt="Slice of Granny’s Gift 7UP pound cake on a plate"
             >
-          </a>
+          </button>
 
-          <a href="images/cake_slice_above.jpg" target="_blank" rel="noopener">
+          <button
+            type="button"
+            class="gallery-open"
+            data-image="images/cake_slice_above.jpg"
+            data-alt="Slice of Granny’s Gift 7UP pound cake photographed from above"
+            aria-label="Expand overhead cake slice photo"
+          >
             <img
               src="images/cake_slice_above.jpg"
               alt="Slice of Granny’s Gift 7UP pound cake photographed from above"
             >
-          </a>
+          </button>
 
-          <a href="images/baby_baker.jpg" target="_blank" rel="noopener">
+          <button
+            type="button"
+            class="gallery-open"
+            data-image="images/baby_baker.jpg"
+            data-alt="Child in the kitchen helping bake with a stand mixer"
+            aria-label="Expand baby baker photo"
+          >
             <img
               src="images/baby_baker.jpg"
               alt="Child in the kitchen helping bake with a stand mixer"
             >
-          </a>
+          </button>
         </div>
 
         <figure class="seasonal-figure seasonal-figure-lower">
-          <a class="featured-shot" href="images/christmas_snack_cakes.JPG" target="_blank" rel="noopener">
+          <a class="featured-shot featured-shot-tall" href="images/christmas_snack_cakes.JPG" target="_blank" rel="noopener">
             <img
               src="images/christmas_snack_cakes.JPG"
               alt="Holiday snack cakes arranged on a decorative plate"
@@ -152,7 +176,61 @@
     <p class="muted">grannysgiftinc@gmail.com • Sea-Tac / South Seattle</p>
   </footer>
 
+  <div id="lightbox" class="lightbox" hidden aria-hidden="true">
+    <button type="button" class="lightbox-close" aria-label="Close image viewer">×</button>
+    <img id="lightbox-image" class="lightbox-image" src="" alt="">
+  </div>
+
   <script src="https://cdn.jsdelivr.net/npm/@emailjs/browser@4/dist/email.min.js"></script>
   <script src="script.js"></script>
+  <script>
+    window.addEventListener('DOMContentLoaded', function () {
+      var lightbox = document.getElementById('lightbox');
+      var lightboxImage = document.getElementById('lightbox-image');
+      var closeBtn = document.querySelector('.lightbox-close');
+      var openButtons = document.querySelectorAll('.gallery-open');
+
+      if (!lightbox || !lightboxImage || !closeBtn || !openButtons.length) return;
+
+      function openLightbox(src, alt) {
+        lightboxImage.src = src;
+        lightboxImage.alt = alt || '';
+        lightbox.hidden = false;
+        lightbox.setAttribute('aria-hidden', 'false');
+        document.body.classList.add('lightbox-open');
+      }
+
+      function closeLightbox() {
+        lightbox.hidden = true;
+        lightbox.setAttribute('aria-hidden', 'true');
+        lightboxImage.src = '';
+        lightboxImage.alt = '';
+        document.body.classList.remove('lightbox-open');
+      }
+
+      openButtons.forEach(function (button) {
+        button.addEventListener('click', function () {
+          openLightbox(
+            button.getAttribute('data-image'),
+            button.getAttribute('data-alt')
+          );
+        });
+      });
+
+      closeBtn.addEventListener('click', closeLightbox);
+
+      lightbox.addEventListener('click', function (event) {
+        if (event.target === lightbox) {
+          closeLightbox();
+        }
+      });
+
+      document.addEventListener('keydown', function (event) {
+        if (event.key === 'Escape' && !lightbox.hidden) {
+          closeLightbox();
+        }
+      });
+    });
+  </script>
 </body>
 </html>
