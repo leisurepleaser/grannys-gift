@@ -1,12 +1,13 @@
 @import url('https://fonts.googleapis.com/css2?family=EB+Garamond:wght@400;500;600;700&display=swap');
 
 :root{
-  --brand-deep: #5A158A;
-  --brand-mid:  #8E24AA;
-  --brand-lite: #BA68C8;
-  --brand-gold: #FFD54F;
-  --brand-ink:  #2b2233;
-  --brand-cream:#FFF8E1;
+  --brand-deep: #766a85;
+  --brand-mid:  #92859f;
+  --brand-lite: #b7adbf;
+  --brand-accent: #bca892;
+  --brand-ink:  #3b3440;
+  --brand-cream:#f5eee6;
+  --brand-panel:#fbf7f3;
   --wrap-max: 1120px;
 }
 
@@ -18,7 +19,7 @@ body {
   margin: 0;
   font-family: "EB Garamond", "Garamond", "Apple Garamond", "Georgia", serif;
   color: var(--brand-ink);
-  background: #FBF5FF;
+  background: #f8f3f6;
   line-height: 1.45;
 }
 
@@ -35,28 +36,36 @@ body {
 }
 
 .promo-hero{
-  background: linear-gradient(135deg, var(--brand-deep), var(--brand-mid));
+  background: linear-gradient(135deg, #7d728d, #9688a3);
   border-radius: 20px;
-  padding: 16px 18px 18px;
+  padding: 18px 18px 20px;
   color: #fff;
-  box-shadow: 0 12px 32px rgba(90,21,138,.22);
-  border: 2px solid var(--brand-gold);
+  box-shadow: 0 12px 32px rgba(86, 72, 98, .18);
+  border: 2px solid var(--brand-accent);
   text-align: center;
 }
 
 .brand-wordmark{
+  margin: 0;
   font-size: 1.7rem;
   font-weight: 600;
   letter-spacing: 0.18em;
   text-transform: uppercase;
 }
 
+.brand-subtitle{
+  margin: 6px 0 0;
+  font-size: 1rem;
+  letter-spacing: 0.08em;
+  color: rgba(255,255,255,.9);
+}
+
 .card{
-  background:#fff;
-  border:1px solid #eee;
-  border-radius:16px;
-  padding:16px;
-  box-shadow:0 10px 28px rgba(90,21,138,.08);
+  background: #fff;
+  border: 1px solid #e9e1e6;
+  border-radius: 16px;
+  padding: 16px;
+  box-shadow: 0 10px 28px rgba(118,106,133,.08);
 }
 
 .brand-layout{
@@ -66,15 +75,8 @@ body {
   align-items: start;
 }
 
-.gallery-heading{
-  margin: 0 0 12px 0;
-  font-size: 2rem;
-  color: var(--brand-ink);
-}
-
 .featured-shot{
   display: block;
-  margin-bottom: 12px;
 }
 
 .featured-shot img{
@@ -82,7 +84,28 @@ body {
   height: clamp(300px, 48vw, 520px);
   object-fit: cover;
   border-radius: 16px;
-  box-shadow: 0 10px 26px rgba(0,0,0,.10);
+  box-shadow: 0 10px 26px rgba(0,0,0,.08);
+}
+
+.seasonal-figure{
+  margin: 0 0 14px;
+  padding: 12px;
+  border: 1px solid #ddd3db;
+  border-radius: 18px;
+  background: linear-gradient(180deg, #fff, var(--brand-panel));
+  box-shadow: 0 8px 18px rgba(118,106,133,.06);
+}
+
+.seasonal-figure-lower{
+  margin-top: 14px;
+}
+
+.photo-caption{
+  margin-top: 10px;
+  padding-top: 8px;
+  border-top: 1px solid #e5d9df;
+  font-size: 1rem;
+  color: var(--brand-deep);
 }
 
 .gallery-grid{
@@ -109,14 +132,14 @@ body {
 }
 
 .ingredients-card{
-  background: linear-gradient(135deg, var(--brand-deep), var(--brand-mid) 60%, var(--brand-lite));
+  background: linear-gradient(135deg, #8d809b, #a89caf 60%, #c4bac8);
   color: #fff;
-  border: 2px solid var(--brand-gold);
+  border: 2px solid var(--brand-accent);
 }
 
 .ingredients-card h2{
   margin-top: 0;
-  color: var(--brand-cream);
+  color: #fffaf4;
 }
 
 .ingredients-list{
@@ -125,17 +148,13 @@ body {
   gap: 6px 12px;
   list-style: none;
   padding: 0;
-  margin: 8px 0 10px;
+  margin: 8px 0 0;
 }
 
 .ingredients-list li::before{
   content: "•";
-  color: #FFE082;
+  color: #f2dfc8;
   margin-right: 6px;
-}
-
-.ingredient-note{
-  color: rgba(255,255,255,.88);
 }
 
 .newsletter-card h2{
@@ -145,7 +164,7 @@ body {
 .row { margin: 8px 0; }
 
 label .req {
-  color: #c62828;
+  color: #a94442;
   font-weight: 700;
   margin-left: 4px;
 }
@@ -154,7 +173,7 @@ input[type="text"],
 input[type="email"]{
   width: 100%;
   padding: 10px 12px;
-  border: 1px solid #ddd;
+  border: 1px solid #d9ced7;
   border-radius: 10px;
   background:#fff;
   color: var(--brand-ink);
@@ -163,7 +182,7 @@ input[type="email"]{
 }
 
 input:focus{
-  outline: 3px solid rgba(142,36,170,.18);
+  outline: 3px solid rgba(146,133,159,.18);
   border-color: var(--brand-mid);
 }
 
@@ -173,12 +192,12 @@ input:focus{
 
 .btn{
   background: linear-gradient(180deg, var(--brand-mid), var(--brand-deep));
-  border: 2px solid var(--brand-gold);
+  border: 2px solid var(--brand-accent);
   color:#fff;
   font-weight:700;
   padding:10px 16px;
   border-radius:12px;
-  box-shadow:0 6px 16px rgba(90,21,138,.18);
+  box-shadow:0 6px 16px rgba(118,106,133,.16);
   cursor: pointer;
   font-family: inherit;
 }
@@ -189,7 +208,7 @@ input:focus{
 }
 
 .btn.ready{
-  outline: 3px solid var(--brand-gold);
+  outline: 3px solid rgba(188,168,146,.45);
 }
 
 .btn.small{
@@ -198,8 +217,8 @@ input:focus{
 }
 
 .success-panel {
-  background: #f3e7ff;
-  border: 1px solid #e2cfff;
+  background: #f3edf6;
+  border: 1px solid #ded0e6;
   border-radius: 14px;
   padding: 12px;
   margin-bottom: 10px;
@@ -211,8 +230,8 @@ input:focus{
   line-height: 32px;
   text-align:center;
   border-radius: 50%;
-  background: #e8f5e9;
-  color: #1b5e20;
+  background: #e8f1ea;
+  color: #356142;
   font-weight: 800;
   margin-bottom: 6px;
 }
@@ -242,8 +261,8 @@ input:focus{
     letter-spacing: 0.14em;
   }
 
-  .gallery-heading{
-    font-size: 1.7rem;
+  .brand-subtitle{
+    font-size: .95rem;
   }
 
   .ingredients-list{
