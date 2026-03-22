@@ -5,7 +5,6 @@
   <meta name="viewport" content="width=device-width, initial-scale=1" />
   <title>Granny’s Gift</title>
 
-  <!-- favicon -->
   <link
     rel="icon"
     href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 64 64'%3E%3Ctext y='50%25' x='50%25' dominant-baseline='middle' text-anchor='middle' font-size='48'%3E%F0%9F%8D%B0%3C/text%3E%3C/svg%3E"
@@ -15,227 +14,81 @@
 </head>
 <body>
 
-  <!-- Brand hero -->
   <header class="brand-hero">
     <div class="promo-hero">
       <div class="brand-wordmark">GRANNY'S GIFT</div>
-      <div class="promo-hero-body">
-        <div class="promo-main">SOLD OUT until Valentines Day 2026</div>
-      </div>
     </div>
   </header>
 
   <main class="wrap">
-    <section class="hero-grid">
-      <!-- LEFT: Order card -->
-      <section class="card" role="region" aria-labelledby="title">
-        <h1 id="title">Order Granny’s Gift</h1>
+    <section class="brand-layout">
+      <section class="gallery-card card" aria-labelledby="gallery-title">
+        <h1 id="gallery-title" class="gallery-heading">Granny’s Gift</h1>
 
-        <!-- Success panel (shown by JS) -->
-        <div id="successPanel" class="success-panel" hidden>
-          <div class="check">✓</div>
-          <h2>Thank you!</h2>
-          <p>
-            We’ve received your inquiry and sent you a confirmation email.
-            A member of our team will reply within
-            <strong>1–3 business days</strong>.
-          </p>
-          <div id="summary" class="summary"></div>
-          <p class="muted">
-            Need to add details? Just reply to the confirmation email.
-          </p>
-        </div>
+        <a class="featured-shot" href="images/christmas_cake.JPG" target="_blank" rel="noopener">
+          <img
+            src="images/christmas_cake.JPG"
+            alt="Granny’s Gift 7UP pound cake and holiday snack cakes arranged for Christmas"
+          >
+        </a>
 
-        <!-- Inquiry form (structure/IDs match script.js exactly) -->
-        <form id="orderForm" novalidate>
-          <div class="row">
-            <label for="name">
-              Name <span class="req">*</span>
-            </label>
-            <input
-              id="name"
-              name="name"
-              type="text"
-              autocomplete="name"
-              required
-            />
-          </div>
-
-          <div class="row">
-            <label for="phone">
-              Phone Number <span class="req">*</span>
-            </label>
-            <input
-              id="phone"
-              name="phone"
-              type="text"
-              inputmode="tel"
-              required
-            />
-          </div>
-
-          <div class="row">
-            <label for="email">
-              Email <span class="req">*</span>
-            </label>
-            <input
-              id="email"
-              name="email"
-              type="email"
-              autocomplete="email"
-              required
-            />
-          </div>
-
-          <div class="row two">
-            <div>
-              <label for="size">
-                Size <span class="req">*</span>
-              </label>
-              <select id="size" name="size" required>
-                <option value="" selected disabled>Choose one…</option>
-                <option value="Whole Cake (1)" data-price="34.99">
-                  Whole Cake (1) — $34.99
-                </option>
-                <option value="Snack Cake (2oz)" data-price="2.99">
-                  Snack Cake (2oz) — $2.99
-                </option>
-              </select>
-            </div>
-            <div>
-              <label for="quantity">
-                Quantity <span class="req">*</span>
-              </label>
-              <select id="quantity" name="quantity" required>
-                <option value="" selected disabled>Choose qty…</option>
-                <option value="1">1</option><option value="2">2</option>
-                <option value="3">3</option><option value="4">4</option>
-                <option value="5">5</option><option value="6">6</option>
-                <option value="7">7</option><option value="8">8</option>
-                <option value="9">9</option><option value="10">10</option>
-                <option value="11">11</option><option value="12">12</option>
-                <option value="Party Order">
-                  Party Order (Snack Cakes 24+, Whole Cakes 3+)
-                </option>
-              </select>
-            </div>
-          </div>
-
-          <div class="row">
-            <label for="message">Message (Optional)</label>
-            <textarea
-              id="message"
-              name="message"
-              maxlength="300"
-              rows="3"
-              placeholder="Up to 300 characters (e.g. Party Order amounts, pickup time)"
-            ></textarea>
-            <small id="charCount" class="muted">0/300</small>
-          </div>
-
-          <div class="total-row">
-            <div
-              id="orderTotal"
-              class="total-box"
-              aria-live="polite"
-              aria-atomic="true"
-            >
-              Estimated total: —
-            </div>
-          </div>
-
-          <!-- Honeypot -->
-          <input
-            id="website"
-            name="website"
-            autocomplete="off"
-            tabindex="-1"
-            class="hp"
-            aria-hidden="true"
-          />
-
-          <button id="submitBtn" type="submit" class="btn" disabled>
-            Submit
-          </button>
-          <div
-            id="status"
-            role="status"
-            aria-live="polite"
-            class="status"
-          ></div>
-        </form>
-
-        <hr class="divider" />
-
-        <!-- Our Story -->
-        <section id="about" class="info about-story">
-          <h2>Our Story</h2>
-          <p class="about-tagline">
-            A heritage lemon–lime 7UP pound cake, baked from one family’s secret.
-          </p>
-          <p>
-            Granny’s Gift is a lemon-lime 7UP pound cake made from a
-            <strong>70+ year secret family recipe</strong> created by Dolores
-            “Granny” Jett. She taught her granddaughter — my mother — who then
-            taught me. Today, only the two of us know the complete recipe and
-            method.
-          </p>
-          <p>
-            Each cake is mixed and baked by hand in our Washington home
-            kitchen, preserving the same care, patience, and tradition that
-            once anchored Granny’s holiday tables. When you serve Granny’s
-            Gift, you are sharing a slice of family history, nostalgia, and
-            home.
-          </p>
-
-          <!-- Baby photo under Our Story (no caption text) -->
-          <figure class="about-photo">
+        <div class="gallery-grid">
+          <a href="images/cake_whole_stand.jpg" target="_blank" rel="noopener">
             <img
-              src="images/baby_baker.jpg"
-              alt="Our baker as a child smiling in the kitchen with a stand mixer"
+              src="images/cake_whole_stand.jpg"
+              alt="Whole Granny’s Gift 7UP pound cake on a stand"
             >
-          </figure>
-        </section>
+          </a>
 
-        <!-- Ingredients -->
-        <section id="ingredients" class="info ingredients-card">
-          <h2>Ingredients & Allergens</h2>
+          <a href="images/cake_slice_hero.jpg" target="_blank" rel="noopener">
+            <img
+              src="images/cake_slice_hero.jpg"
+              alt="Slice of Granny’s Gift 7UP pound cake on a plate"
+            >
+          </a>
+
+          <a href="images/cake_slice_above.jpg" target="_blank" rel="noopener">
+            <img
+              src="images/cake_slice_above.jpg"
+              alt="Slice of Granny’s Gift 7UP pound cake photographed from above"
+            >
+          </a>
+
+          <a href="images/christmas_snack_cakes.JPG" target="_blank" rel="noopener">
+            <img
+              src="images/christmas_snack_cakes.JPG"
+              alt="Holiday snack cakes arranged on a decorative plate"
+            >
+          </a>
+        </div>
+      </section>
+
+      <aside class="sidebar-stack">
+        <section id="ingredients" class="card ingredients-card">
+          <h2>Ingredients</h2>
           <ul class="ingredients-list">
             <li>sugar</li>
             <li>flour</li>
-            <li><strong>gluten</strong></li>
-            <li><strong>eggs</strong></li>
+            <li>gluten</li>
+            <li>eggs</li>
             <li>7UP</li>
             <li>butter</li>
             <li>vegetable oil</li>
             <li>lemon</li>
-            <li><strong>coconut</strong></li>
+            <li>coconut</li>
           </ul>
-          <p class="muted">
-            Allergens are bolded. Prepared in a Washington State home kitchen.
+          <p class="muted ingredient-note">
+            Prepared in a Washington State home kitchen.
           </p>
         </section>
 
-        <!-- Contact -->
-        <section id="contact" class="info contact-card">
-          <h2>Contact us</h2>
-          <ul class="contact-list">
-            <li>
-              <strong>Email:</strong>
-              grannysgiftinc@gmail.com
-            </li>
-            <li><strong>Pickup Area:</strong> Sea-Tac / South Seattle</li>
-          </ul>
-        </section>
-
-        <!-- Newsletter -->
-        <section id="newsletter" class="info newsletter-card">
+        <section id="newsletter" class="card newsletter-card">
           <h2>Get cake drops &amp; special offers</h2>
           <p class="muted">
-            Join the Granny’s Gift list for early access to pre-orders, limited drops,
-            and occasional promotions. No boring “news” — just delicious cake updates
-            and deals.
+            Join the Granny’s Gift list for future releases, limited drops,
+            and occasional promotions.
           </p>
+
           <form id="newsletterForm" novalidate>
             <div class="row">
               <label for="nl_name">Name (optional)</label>
@@ -246,6 +99,7 @@
                 autocomplete="name"
               />
             </div>
+
             <div class="row">
               <label for="nl_email">
                 Email <span class="req" aria-hidden="true">*</span>
@@ -258,6 +112,7 @@
                 required
               />
             </div>
+
             <input
               id="nl_website"
               name="nl_website"
@@ -266,174 +121,25 @@
               class="hp"
               aria-hidden="true"
             />
+
             <button id="nl_submit" type="submit" class="btn small" disabled>
-              Get cake offers
+              Join the list
             </button>
           </form>
+
           <p class="muted tiny">
             You can unsubscribe anytime using a link in any email.
           </p>
         </section>
-      </section>
-
-      <!-- RIGHT: Hero photo + menu -->
-      <aside class="product-hero card" aria-label="Product photo and menu">
-        <!-- Whole cake hero above menu -->
-        <figure class="hero-figure">
-          <img
-            class="hero-cake"
-            src="images/christmas_cake.JPG"
-            alt="Granny’s Gift 7UP pound cake surrounded by snack cakes on a Christmas table"
-          >
-          <figcaption class="muted">
-            Whole 7UP Pound Cake with snack cakes — Christmas set
-          </figcaption>
-        </figure>
-
-        <!-- Flavor sign -->
-        <p class="flavor-tag">Lemon-lime flavored, moist pound cake</p>
-
-        <!-- Menu & pricing -->
-        <div class="menu-card">
-          <h3 class="menu-title">Menu & Pricing</h3>
-          <ul class="menu-list" role="list">
-            <li><span>Whole 7UP Pound Cake (10&quot;)</span><span>$34.99</span></li>
-            <li><span>Snack Cake (2oz)</span><span>$2.99</span></li>
-          </ul>
-          <p class="menu-note tiny muted">
-            Whole 10&quot; cakes are limited to <strong>2 per customer</strong> per
-            standard order. Need more? Select <strong>Party Order</strong> in the
-            quantity dropdown and specify your desired number in the message box
-            (Party Orders for whole cakes typically start at <strong>3+</strong>).
-          </p>
-          <p class="menu-note tiny muted">
-            Snack Cakes (2oz) are sold in <strong>increments of 12</strong> and are
-            limited to <strong>12 snack cakes</strong> per standard order
-            (one set of 12). Need more than 12? Select
-            <strong>Party Order (Snack Cakes 24+)</strong> and include your total
-            requested amount in the message box.
-          </p>
-          <p class="menu-note tiny muted">
-            Local pickup near Sea-Tac. Tax may apply.
-          </p>
-        </div>
-
-        <!-- Christmas snack cakes image below menu -->
-        <figure class="hero-figure hero-figure-secondary">
-          <img
-            class="hero-cake"
-            src="images/christmas_snack_cakes.JPG"
-            alt="Christmas display of Granny’s Gift 7UP snack cakes arranged on a blue snowflake plate"
-          >
-          <figcaption class="muted">
-            Holiday snack cakes — perfect for sharing or gifting
-          </figcaption>
-        </figure>
       </aside>
-
-      <!-- BELOW: Cake gallery -->
-      <section class="gallery card" aria-labelledby="gallery-title">
-        <h2 id="gallery-title">See More</h2>
-        <div class="gallery-grid">
-          <!-- Clickable to view larger (opens in new tab) -->
-          <a href="images/cake_slice_hero.jpg" target="_blank" rel="noopener">
-            <img
-              src="images/cake_slice_hero.jpg"
-              alt="Slice of Granny’s Gift 7UP pound cake on a plate"
-            >
-          </a>
-          <a href="images/cake_slice_above.jpg" target="_blank" rel="noopener">
-            <img
-              src="images/cake_slice_above.jpg"
-              alt="Slice of Granny’s Gift 7UP pound cake photographed from above on a white plate with utensils"
-            >
-          </a>
-          <a href="images/cake_whole_stand.jpg" target="_blank" rel="noopener">
-            <img
-              src="images/cake_whole_stand.jpg"
-              alt="Whole Granny’s Gift 7UP pound cake with a slice removed"
-            >
-          </a>
-          <a href="images/baby_baker.jpg" target="_blank" rel="noopener">
-            <img
-              src="images/baby_baker.jpg"
-              alt="Child in the kitchen helping bake with a stand mixer"
-            >
-          </a>
-        </div>
-      </section>
-    </section>
-
-    <!-- TESTIMONIALS / REVIEWS -->
-    <section id="testimonials" class="card testimonials">
-      <h2>What Our Customers Say</h2>
-      <p class="muted tiny">
-        Real feedback from Granny’s Gift customers in Washington State.
-      </p>
-      <div class="testimonials-grid">
-        <figure class="testimonial">
-          <blockquote>
-            “I give this a 11/10 🤤”
-          </blockquote>
-          <figcaption>— Kita B. • 12/08/25</figcaption>
-        </figure>
-        <figure class="testimonial">
-          <blockquote>
-            “Cake is on point man! You are the best!! Thx bro... 🔥👍”
-          </blockquote>
-          <figcaption>— Mike L. • 11/14/25</figcaption>
-        </figure>
-        <figure class="testimonial">
-          <blockquote>
-            “Baby boy and wifey loved the cakes... thanks again Kyle.”
-          </blockquote>
-          <figcaption>— Christopher G. • 09/22/25</figcaption>
-        </figure>
-        <figure class="testimonial">
-          <blockquote>
-            “<em>cake crumbs</em> This is what is left of the cake! My fam smashed it.
-            It was still warm when I got home.”
-          </blockquote>
-          <figcaption>— Jessie M. • 11/20/25</figcaption>
-        </figure>
-        <figure class="testimonial">
-          <blockquote>
-            “Thank you so much for the yummy cake and for thinking of us!”
-          </blockquote>
-          <figcaption>— Leslie S. • 11/16/25</figcaption>
-        </figure>
-        <figure class="testimonial">
-          <blockquote>
-            “The cake was fire... and I don't usually like lemon flavoring in cake.
-            It made my day!”
-          </blockquote>
-          <figcaption>— Tony N. • 12/13/25</figcaption>
-        </figure>
-      </div>
     </section>
   </main>
 
-  <!-- EmailJS + site JS -->
+  <footer class="wrap footer-note">
+    <p class="muted">grannysgiftinc@gmail.com • Sea-Tac / South Seattle</p>
+  </footer>
+
   <script src="https://cdn.jsdelivr.net/npm/@emailjs/browser@4/dist/email.min.js"></script>
   <script src="script.js"></script>
-  <script>
-    // Override so "Party Order" shows "TBD" instead of a dollar total
-    window.addEventListener('DOMContentLoaded', function () {
-      var qty = document.getElementById('quantity');
-      var size = document.getElementById('size');
-      var totalBox = document.getElementById('orderTotal');
-      if (!qty || !totalBox) return;
-
-      function maybeOverrideTotal() {
-        if (qty.value === 'Party Order') {
-          totalBox.textContent = 'Estimated total: TBD';
-        }
-      }
-
-      qty.addEventListener('change', maybeOverrideTotal);
-      if (size) size.addEventListener('change', maybeOverrideTotal);
-    });
-  </script>
 </body>
 </html>
-
