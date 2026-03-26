@@ -327,15 +327,17 @@ img {
   width: clamp(150px, 14.9vw, 228px);
   aspect-ratio: 3.15 / 1;
   border-radius: 999px;
-  border: 2px solid rgba(255, 255, 255, 0.96);
   background: transparent;
-  transition: border-color 160ms ease, background 160ms ease;
+  border: 0;
+  box-shadow: none;
 }
 
 .homepage-banner__cta-link:hover,
 .homepage-banner__cta-link:focus-visible {
-  background: rgba(255, 255, 255, 0.04);
-  border-color: rgba(255, 255, 255, 1);
+  background: transparent;
+  border: 0;
+  box-shadow: none;
+  outline: none;
 }
 
 /* PAGE LAYOUT */
@@ -574,7 +576,6 @@ input:focus,
 .lightbox-close:focus-visible,
 .btn:focus-visible,
 .contact-link:focus-visible,
-.homepage-banner__cta-link:focus-visible {
   outline: 3px solid rgba(138, 174, 147, 0.2);
   outline-offset: 3px;
 }
