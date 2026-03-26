@@ -73,166 +73,180 @@
     </div>
   </header>
 
-  <main class="wrap site-main">
-    <section class="brand-layout">
-      <section class="gallery-card card" aria-label="Photo gallery">
-        <figure class="seasonal-figure">
-          <button
-            type="button"
-            class="featured-shot gallery-open"
-            data-image="images/christmas_cake.JPG"
-            data-alt="Granny’s Gift whole 10-inch cake arranged for Christmas"
-            aria-label="Expand whole 10-inch cake photo"
-          >
-            <img
-              src="images/christmas_cake.JPG"
-              alt="Granny’s Gift whole 10-inch cake arranged for Christmas"
+  <main class="site-main">
+    <section class="hero-banner-shell" aria-label="Granny's Gift introductory banner">
+      <div class="hero-banner">
+        <img
+          class="hero-banner__image"
+          src="images/Generations_Promo_Banner.png"
+          alt="Generations in Every Slice promotional banner for Granny's Gift"
+          loading="eager"
+          fetchpriority="high"
+        >
+      </div>
+    </section>
+
+    <section class="wrap">
+      <section class="brand-layout">
+        <section class="gallery-card card" aria-label="Photo gallery">
+          <figure class="seasonal-figure">
+            <button
+              type="button"
+              class="featured-shot gallery-open"
+              data-image="images/christmas_cake.JPG"
+              data-alt="Granny’s Gift whole 10-inch cake arranged for Christmas"
+              aria-label="Expand whole 10-inch cake photo"
             >
-          </button>
-          <figcaption class="photo-caption">
-            Whole 10-inch cake.
-          </figcaption>
-        </figure>
-
-        <div class="gallery-grid">
-          <button
-            type="button"
-            class="gallery-open"
-            data-image="images/cake_whole_stand.jpg"
-            data-alt="Whole Granny’s Gift 7UP pound cake on a stand"
-            aria-label="Expand whole cake photo"
-          >
-            <img
-              src="images/cake_whole_stand.jpg"
-              alt="Whole Granny’s Gift 7UP pound cake on a stand"
-            >
-          </button>
-
-          <button
-            type="button"
-            class="gallery-open"
-            data-image="images/cake_slice_hero.jpg"
-            data-alt="Slice of Granny’s Gift 7UP pound cake on a plate"
-            aria-label="Expand cake slice photo"
-          >
-            <img
-              src="images/cake_slice_hero.jpg"
-              alt="Slice of Granny’s Gift 7UP pound cake on a plate"
-            >
-          </button>
-
-          <button
-            type="button"
-            class="gallery-open"
-            data-image="images/cake_slice_above.jpg"
-            data-alt="Slice of Granny’s Gift 7UP pound cake photographed from above"
-            aria-label="Expand overhead cake slice photo"
-          >
-            <img
-              src="images/cake_slice_above.jpg"
-              alt="Slice of Granny’s Gift 7UP pound cake photographed from above"
-            >
-          </button>
-
-          <button
-            type="button"
-            class="gallery-open"
-            data-image="images/baby_baker.jpg"
-            data-alt="Child in the kitchen helping bake with a stand mixer"
-            aria-label="Expand baby baker photo"
-          >
-            <img
-              src="images/baby_baker.jpg"
-              alt="Child in the kitchen helping bake with a stand mixer"
-            >
-          </button>
-        </div>
-
-        <figure class="seasonal-figure seasonal-figure-lower">
-          <button
-            type="button"
-            class="featured-shot featured-shot-tall gallery-open"
-            data-image="images/christmas_snack_cakes.JPG"
-            data-alt="Holiday snack cakes arranged on a decorative plate"
-            aria-label="Expand holiday snack cakes photo"
-          >
-            <img
-              src="images/christmas_snack_cakes.JPG"
-              alt="Holiday snack cakes arranged on a decorative plate"
-            >
-          </button>
-          <figcaption class="photo-caption">
-            Holiday snack cakes — perfect for sharing or gifting.
-          </figcaption>
-        </figure>
-      </section>
-
-      <aside class="sidebar-stack">
-        <section id="ingredients" class="card ingredients-card">
-          <h2>Ingredients</h2>
-          <ul class="ingredients-list">
-            <li>sugar</li>
-            <li>flour</li>
-            <li>gluten</li>
-            <li>eggs</li>
-            <li>7UP</li>
-            <li>butter</li>
-            <li>vegetable oil</li>
-            <li>lemon</li>
-            <li>coconut</li>
-          </ul>
-        </section>
-
-        <section id="newsletter" class="card newsletter-card">
-          <h2>Get cake drops &amp; special offers</h2>
-          <p class="muted">
-            Join the Granny’s Gift list for future releases, limited drops,
-            and occasional promotions.
-          </p>
-
-          <form id="newsletterForm" novalidate>
-            <div class="row">
-              <label for="nl_name">Name (optional)</label>
-              <input
-                id="nl_name"
-                name="nl_name"
-                type="text"
-                autocomplete="name"
-              />
-            </div>
-
-            <div class="row">
-              <label for="nl_email">
-                Email <span class="req" aria-hidden="true">*</span>
-              </label>
-              <input
-                id="nl_email"
-                name="nl_email"
-                type="email"
-                autocomplete="email"
-                required
-              />
-            </div>
-
-            <input
-              id="nl_website"
-              name="nl_website"
-              autocomplete="off"
-              tabindex="-1"
-              class="hp"
-              aria-hidden="true"
-            />
-
-            <button id="nl_submit" type="submit" class="btn small" disabled>
-              Join the list
+              <img
+                src="images/christmas_cake.JPG"
+                alt="Granny’s Gift whole 10-inch cake arranged for Christmas"
+              >
             </button>
-          </form>
+            <figcaption class="photo-caption">
+              Whole 10-inch cake.
+            </figcaption>
+          </figure>
 
-          <p class="muted tiny">
-            You can unsubscribe anytime using a link in any email.
-          </p>
+          <div class="gallery-grid">
+            <button
+              type="button"
+              class="gallery-open"
+              data-image="images/cake_whole_stand.jpg"
+              data-alt="Whole Granny’s Gift soda pop cake on a stand"
+              aria-label="Expand whole cake photo"
+            >
+              <img
+                src="images/cake_whole_stand.jpg"
+                alt="Whole Granny’s Gift soda pop cake on a stand"
+              >
+            </button>
+
+            <button
+              type="button"
+              class="gallery-open"
+              data-image="images/cake_slice_hero.jpg"
+              data-alt="Slice of Granny’s Gift soda pop cake on a plate"
+              aria-label="Expand cake slice photo"
+            >
+              <img
+                src="images/cake_slice_hero.jpg"
+                alt="Slice of Granny’s Gift soda pop cake on a plate"
+              >
+            </button>
+
+            <button
+              type="button"
+              class="gallery-open"
+              data-image="images/cake_slice_above.jpg"
+              data-alt="Slice of Granny’s Gift soda pop cake photographed from above"
+              aria-label="Expand overhead cake slice photo"
+            >
+              <img
+                src="images/cake_slice_above.jpg"
+                alt="Slice of Granny’s Gift soda pop cake photographed from above"
+              >
+            </button>
+
+            <button
+              type="button"
+              class="gallery-open"
+              data-image="images/baby_baker.jpg"
+              data-alt="Child in the kitchen helping bake with a stand mixer"
+              aria-label="Expand family baking photo"
+            >
+              <img
+                src="images/baby_baker.jpg"
+                alt="Child in the kitchen helping bake with a stand mixer"
+              >
+            </button>
+          </div>
+
+          <figure class="seasonal-figure seasonal-figure-lower">
+            <button
+              type="button"
+              class="featured-shot featured-shot-tall gallery-open"
+              data-image="images/christmas_snack_cakes.JPG"
+              data-alt="Holiday snack cakes arranged on a decorative plate"
+              aria-label="Expand holiday snack cakes photo"
+            >
+              <img
+                src="images/christmas_snack_cakes.JPG"
+                alt="Holiday snack cakes arranged on a decorative plate"
+              >
+            </button>
+            <figcaption class="photo-caption">
+              Holiday snack cakes — perfect for sharing or gifting.
+            </figcaption>
+          </figure>
         </section>
-      </aside>
+
+        <aside class="sidebar-stack">
+          <section id="ingredients" class="card ingredients-card">
+            <h2>Ingredients</h2>
+            <ul class="ingredients-list">
+              <li>sugar</li>
+              <li>flour</li>
+              <li>gluten</li>
+              <li>eggs</li>
+              <li>7UP</li>
+              <li>butter</li>
+              <li>vegetable oil</li>
+              <li>lemon</li>
+              <li>coconut</li>
+            </ul>
+          </section>
+
+          <section id="newsletter" class="card newsletter-card">
+            <h2>Get cake drops &amp; special offers</h2>
+            <p class="muted">
+              Join the Granny’s Gift list for future releases, limited drops,
+              and occasional promotions.
+            </p>
+
+            <form id="newsletterForm" novalidate>
+              <div class="row">
+                <label for="nl_name">Name (optional)</label>
+                <input
+                  id="nl_name"
+                  name="nl_name"
+                  type="text"
+                  autocomplete="name"
+                />
+              </div>
+
+              <div class="row">
+                <label for="nl_email">
+                  Email <span class="req" aria-hidden="true">*</span>
+                </label>
+                <input
+                  id="nl_email"
+                  name="nl_email"
+                  type="email"
+                  autocomplete="email"
+                  required
+                />
+              </div>
+
+              <input
+                id="nl_website"
+                name="nl_website"
+                autocomplete="off"
+                tabindex="-1"
+                class="hp"
+                aria-hidden="true"
+              />
+
+              <button id="nl_submit" type="submit" class="btn small" disabled>
+                Join the list
+              </button>
+            </form>
+
+            <p class="muted tiny">
+              You can unsubscribe anytime using a link in any email.
+            </p>
+          </section>
+        </aside>
+      </section>
     </section>
   </main>
 

@@ -13,9 +13,13 @@
   --header-offset: 118px;
 }
 
-* { box-sizing: border-box; }
+* {
+  box-sizing: border-box;
+}
 
-html, body { height: 100%; }
+html, body {
+  height: 100%;
+}
 
 html {
   scroll-behavior: smooth;
@@ -47,6 +51,8 @@ input {
   margin: 0 auto;
   padding: 0 12px;
 }
+
+/* HEADER */
 
 .site-header {
   position: fixed;
@@ -235,9 +241,33 @@ input {
   transform: translateY(-7px) rotate(-45deg);
 }
 
+/* HERO BANNER */
+
 .site-main {
   padding-top: 6px;
 }
+
+.hero-banner-shell {
+  max-width: 1280px;
+  margin: 10px auto 22px;
+  padding: 0 14px;
+}
+
+.hero-banner {
+  overflow: hidden;
+  border-radius: 28px;
+  background: #ecece7;
+  border: 1px solid rgba(111, 151, 128, 0.18);
+  box-shadow: 0 20px 48px rgba(55, 66, 59, 0.10);
+}
+
+.hero-banner__image {
+  display: block;
+  width: 100%;
+  height: auto;
+}
+
+/* MAIN CONTENT */
 
 .card {
   background: #fff;
@@ -353,7 +383,9 @@ input {
   margin-top: 0;
 }
 
-.row { margin: 8px 0; }
+.row {
+  margin: 8px 0;
+}
 
 label .req {
   color: #a94442;
@@ -385,9 +417,17 @@ input:focus,
   outline-offset: 3px;
 }
 
-.muted { color: #667168; }
-.tiny { font-size: 12px; }
-.hp { display: none !important; }
+.muted {
+  color: #667168;
+}
+
+.tiny {
+  font-size: 12px;
+}
+
+.hp {
+  display: none !important;
+}
 
 .btn {
   background: linear-gradient(180deg, var(--brand-mid), var(--brand-deep));
@@ -415,6 +455,19 @@ input:focus,
   padding: 8px 12px;
 }
 
+.status {
+  margin-top: 10px;
+  font-size: 0.95rem;
+}
+
+.status.error {
+  color: #9c3a36;
+}
+
+.status.ok {
+  color: #356142;
+}
+
 .success-panel {
   background: #eef4ef;
   border: 1px solid #d9e5dc;
@@ -439,6 +492,8 @@ input:focus,
   padding: 18px 12px 20px;
   text-align: center;
 }
+
+/* LIGHTBOX */
 
 .lightbox[hidden] {
   display: none !important;
@@ -480,6 +535,8 @@ input:focus,
   cursor: pointer;
 }
 
+/* RESPONSIVE */
+
 @media (max-width: 1100px) {
   .site-header__bar {
     gap: 18px;
@@ -511,6 +568,15 @@ input:focus,
 
   .gallery-grid {
     grid-template-columns: 1fr 1fr;
+  }
+
+  .hero-banner-shell {
+    margin: 8px auto 18px;
+    padding: 0 12px;
+  }
+
+  .hero-banner {
+    border-radius: 22px;
   }
 
   .site-header {
@@ -579,6 +645,10 @@ input:focus,
 
   .gallery-grid {
     grid-template-columns: 1fr;
+  }
+
+  .hero-banner {
+    border-radius: 16px;
   }
 
   .site-wordmark__main {
