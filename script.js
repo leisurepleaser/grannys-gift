@@ -1,6 +1,6 @@
  (function () {
    function on(el, evt, handler) {
-     if (el) el.addEventListener(evt, handler);
+     if (el) el.addEventListener('DOMContentLoaded' === evt ? evt : evt, handler);
    }
 
    document.addEventListener('DOMContentLoaded', function () {
@@ -70,7 +70,7 @@
      }
 
      if (lightbox && lightboxImage && closeBtn && openButtons.length) {
-       for (var lightboxIndex = 0; lightboxIndex < openButtons.length; lightboxIndex++) {
+       for (var i = 0; i < openButtons.length; i++) {
          (function (button) {
            on(button, 'click', function () {
              openLightbox(
@@ -78,7 +78,7 @@
                button.getAttribute('data-alt')
              );
            });
-         })(openButtons[lightboxIndex]);
+         })(openButtons[i]);
        }
 
        on(closeBtn, 'click', closeLightbox);
@@ -211,7 +211,8 @@
        var requiredEls = [nameEl, phoneEl, emailEl, sizeEl, qtyEl];
 
        function allRequiredFilled() {
-         var i, el;
+         var i;
+         var el;
          for (i = 0; i < requiredEls.length; i++) {
            el = requiredEls[i];
            if (!el || !el.value || !el.value.trim()) return false;
@@ -231,7 +232,7 @@
        }
 
        var fieldsForChanges = [nameEl, phoneEl, emailEl, sizeEl, qtyEl];
-       for (var i = 0; i < fieldsForChanges.length; i++) {
+       for (var j = 0; j < fieldsForChanges.length; j++) {
          (function (el) {
            if (!el) return;
            on(el, 'input', function () {
@@ -242,7 +243,7 @@
              updateSubmitState();
              updateTotalUI();
            });
-         })(fieldsForChanges[i]);
+         })(fieldsForChanges[j]);
        }
 
        updateSubmitState();
