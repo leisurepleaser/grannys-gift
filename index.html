@@ -13,15 +13,67 @@
   <link rel="stylesheet" href="styles.css" />
 </head>
 <body>
+  <header class="site-header" aria-label="Main site header">
+    <div class="site-header__inner">
+      <div class="site-header__bar">
+        <button type="button" class="site-wordmark" aria-label="Granny's Gift home">
+          <span class="site-wordmark__main">Granny’s Gift</span>
+        </button>
 
-  <header class="brand-hero">
-    <div class="promo-hero">
-      <h1 class="brand-wordmark">GRANNY'S GIFT</h1>
-      <p class="brand-subtitle">A Living Legacy</p>
+        <button
+          type="button"
+          class="menu-toggle"
+          id="menuToggle"
+          aria-expanded="false"
+          aria-controls="headerMenu"
+          aria-label="Open navigation menu"
+        >
+          <span></span>
+          <span></span>
+          <span></span>
+        </button>
+
+        <div class="site-header__menu" id="headerMenu">
+          <nav class="site-nav" aria-label="Primary navigation">
+            <button type="button" class="site-nav__link">OUR STORY</button>
+            <button type="button" class="site-nav__link">SODA POP CAKE</button>
+            <button type="button" class="site-nav__link">WHERE TO BUY</button>
+            <button type="button" class="site-nav__link">CONTACT US</button>
+          </nav>
+
+          <div class="site-social" aria-label="Social media">
+            <button type="button" class="site-social__link" aria-label="Instagram">
+              <svg viewBox="0 0 24 24" aria-hidden="true">
+                <rect x="3.5" y="3.5" width="17" height="17" rx="5"></rect>
+                <circle cx="12" cy="12" r="4"></circle>
+                <circle cx="17.2" cy="6.8" r="1"></circle>
+              </svg>
+            </button>
+
+            <button type="button" class="site-social__link" aria-label="Facebook">
+              <svg viewBox="0 0 24 24" aria-hidden="true">
+                <path d="M13.5 21v-8h2.7l.5-3h-3.2V8.1c0-.9.3-1.6 1.7-1.6H17V3.8c-.3 0-.9-.1-2-.1-2.9 0-4.7 1.8-4.7 5V10H7.5v3h2.8v8h3.2Z"></path>
+              </svg>
+            </button>
+
+            <button type="button" class="site-social__link" aria-label="TikTok">
+              <svg viewBox="0 0 24 24" aria-hidden="true">
+                <path d="M14.7 3.5c.4 1.1 1.1 2 2 2.6.8.6 1.8 1 2.8 1v2.8c-1.3 0-2.6-.3-3.8-.9v5.6c0 3.2-2.4 5.4-5.6 5.4-3 0-5.4-2.2-5.4-5.1 0-3.1 2.6-5.4 5.8-5.1v2.9c-1.4-.2-2.8.7-2.8 2.2 0 1.3 1 2.3 2.4 2.3 1.5 0 2.4-1.1 2.4-2.7V3.5h2.2Z"></path>
+              </svg>
+            </button>
+
+            <button type="button" class="site-social__link" aria-label="Pinterest">
+              <svg viewBox="0 0 24 24" aria-hidden="true">
+                <path d="M12 3.2c-4.8 0-7.2 3.4-7.2 6.9 0 1.9.7 3.7 2.2 4.3.2.1.3 0 .4-.2 0-.2.2-.8.3-1 .1-.2 0-.3-.1-.5-.4-.6-.7-1.5-.7-2.6 0-2.5 1.9-4.8 5-4.8 2.7 0 4.2 1.7 4.2 3.9 0 2.9-1.3 5.4-3.2 5.4-1.1 0-1.8-.9-1.6-2 .3-1.3.8-2.7.8-3.6 0-.8-.4-1.5-1.3-1.5-1 0-1.8 1.1-1.8 2.5 0 .9.3 1.6.3 1.6l-1.2 5.1c-.3 1.1 0 2.4.1 3.2.1.1.2.1.2 0 .1-.2 1.2-1.6 1.5-2.9l.4-1.6c.4.7 1.4 1.3 2.6 1.3 3.5 0 5.8-3.2 5.8-7.4 0-3.1-2.7-6-6.7-6Z"></path>
+              </svg>
+            </button>
+          </div>
+        </div>
+      </div>
     </div>
   </header>
 
-  <main class="wrap">
+  <main class="wrap site-main">
     <section class="brand-layout">
       <section class="gallery-card card" aria-label="Photo gallery">
         <figure class="seasonal-figure">
@@ -195,54 +247,5 @@
 
   <script src="https://cdn.jsdelivr.net/npm/@emailjs/browser@4/dist/email.min.js"></script>
   <script src="script.js"></script>
-  <script>
-    window.addEventListener('DOMContentLoaded', function () {
-      var lightbox = document.getElementById('lightbox');
-      var lightboxImage = document.getElementById('lightbox-image');
-      var closeBtn = document.querySelector('.lightbox-close');
-      var openButtons = document.querySelectorAll('.gallery-open');
-
-      if (!lightbox || !lightboxImage || !closeBtn || !openButtons.length) return;
-
-      function openLightbox(src, alt) {
-        lightboxImage.src = src;
-        lightboxImage.alt = alt || '';
-        lightbox.hidden = false;
-        lightbox.setAttribute('aria-hidden', 'false');
-        document.body.classList.add('lightbox-open');
-      }
-
-      function closeLightbox() {
-        lightbox.hidden = true;
-        lightbox.setAttribute('aria-hidden', 'true');
-        lightboxImage.src = '';
-        lightboxImage.alt = '';
-        document.body.classList.remove('lightbox-open');
-      }
-
-      openButtons.forEach(function (button) {
-        button.addEventListener('click', function () {
-          openLightbox(
-            button.getAttribute('data-image'),
-            button.getAttribute('data-alt')
-          );
-        });
-      });
-
-      closeBtn.addEventListener('click', closeLightbox);
-
-      lightbox.addEventListener('click', function (event) {
-        if (event.target === lightbox) {
-          closeLightbox();
-        }
-      });
-
-      document.addEventListener('keydown', function (event) {
-        if (event.key === 'Escape' && !lightbox.hidden) {
-          closeLightbox();
-        }
-      });
-    });
-  </script>
 </body>
 </html>
