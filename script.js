@@ -93,10 +93,7 @@
      var CFG = {
        EMAILJS_PUBLIC_KEY: 'fTkyrOb1GWzQ36JvY',
        EMAILJS_SERVICE_ID: 'service_5axgx93',
-       EMAILJS_INTERNAL_TEMPLATE_ID: 'template_fxankcs',
-       EMAILJS_AUTOREPLY_TEMPLATE_ID: 'template_aew1yes',
-       EMAILJS_NEWSLETTER_TEMPLATE_ID: 'template_p7tmtwl',
-       GSHEETS_WEBAPP_URL: ''
+       EMAILJS_NEWSLETTER_TEMPLATE_ID: 'template_p7tmtwl'
      };
 
      if (window.emailjs && typeof emailjs.init === 'function') {
@@ -105,8 +102,6 @@
        } catch (e) {
          console.error('EmailJS init failed:', e);
        }
-     } else {
-       console.warn('EmailJS SDK not loaded; forms will still enable.');
      }
 
      function escapeHtml(s) {
@@ -149,11 +144,11 @@
 
        on(nForm, 'submit', function (e) {
          e.preventDefault();
+
          if (nlHP && nlHP.value && nlHP.value.trim()) return;
          if (!nlReady()) return;
 
          if (!window.emailjs || !CFG.EMAILJS_SERVICE_ID || !CFG.EMAILJS_NEWSLETTER_TEMPLATE_ID) {
-           console.error('EmailJS not configured for newsletter.');
            var fail = document.createElement('p');
            fail.className = 'status error';
            fail.textContent = "We couldn't join you automatically. Please email us at grannysgiftinc@gmail.com.";
